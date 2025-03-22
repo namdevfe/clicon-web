@@ -1,0 +1,24 @@
+{
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.fontSize": 16,
+  "prettier.jsxSingleQuote": true,
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "none",
+  "prettier.requireConfig": true, // Đảm bảo Prettier chỉ chạy khi có tệp cấu hình
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html"
+  ], // Kiểm tra các tệp liên quan
+  "eslint.alwaysShowStatus": true, // Hiển thị trạng thái của ESLint
+  "eslint.run": "onType", // Chạy ESLint khi bạn nhập code, thay vì chỉ khi lưu
+  "editor.codeActionsOnSave": {
+    "eslint.autoFixOnSave": "always",
+    "source.fixAll.eslint": "always"
+  } // Tự động sửa lỗi khi lưu
+}

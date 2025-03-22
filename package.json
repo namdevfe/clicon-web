@@ -6,21 +6,38 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "prettier:format": "prettier . --write",
+    "prettier:check": "prettier --check \"**/*.{ts,tsx,json}\"",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "src/**/*": [
+      "npm run prettier:format"
+    ]
   },
   "dependencies": {
+    "next": "14.2.25",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.25"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
     "eslint": "^8",
-    "eslint-config-next": "14.2.25"
+    "eslint-config-next": "14.2.25",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "postcss": "^8",
+    "prettier": "3.5.3",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }
