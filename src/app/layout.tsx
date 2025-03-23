@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import '@/styles/globals.css'
+import '@/styles/globals.scss'
 
 const publicSans = localFont({
   src: [
@@ -39,7 +39,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={publicSans.className}>{children}</body>
+      <body className={publicSans.className} suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   )
 }
