@@ -8,6 +8,26 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        lg: '1440px',
+        md: '1200px',
+        sm: '992px',
+        xs: '768px',
+        xxs: '576px',
+        xxxs: '376px'
+      },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: '15px',
+          md: '28px'
+        },
+        screens: {
+          DEFAULT: '100%',
+          md: '1140px',
+          sm: '960px'
+        }
+      },
       colors: {
         primary: {
           900: '#331B0A',
