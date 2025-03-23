@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply max-w-[1920px] bg-white text-body-small-400 mx-auto;
+  }
+}
+
+@layer components {
+  .text-body-large-400 {
+    @apply text-body-large font-normal;
+  }
+
+  .text-body-large-500 {
+    @apply text-body-large font-medium;
+  }
+
+  .text-body-large-600 {
+    @apply text-body-large font-semibold;
+  }
+
+  .text-body-medium-400 {
+    @apply text-body-medium font-normal;
+  }
+
+  .text-body-medium-500 {
+    @apply text-body-medium font-medium;
+  }
+
+  .text-body-medium-600 {
+    @apply text-body-medium font-semibold;
+  }
+
+  .text-body-small-400 {
+    @apply text-body-small font-normal;
+  }
+
+  .text-body-small-500 {
+    @apply text-body-small font-medium;
+  }
+
+  .text-body-small-600 {
+    @apply text-body-small font-semibold;
+  }
+
+  .text-body-tiny-400 {
+    @apply text-body-tiny font-normal;
+  }
+
+  .text-body-tiny-500 {
+    @apply text-body-tiny font-medium;
+  }
+
+  .text-body-tiny-600 {
+    @apply text-body-tiny font-semibold;
+  }
+
+  .text-body-xs-400 {
+    @apply text-body-xs font-normal;
+  }
+
+  .text-body-xs-500 {
+    @apply text-body-xs font-medium;
+  }
+
+  .text-body-xs-600 {
+    @apply text-body-xs font-semibold;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
