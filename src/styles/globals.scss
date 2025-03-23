@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply max-w-[1920px] bg-white text-body-small-400 mx-auto;
+  }
+}
+
 @layer components {
   .text-body-large-400 {
     @apply text-body-large font-normal;
