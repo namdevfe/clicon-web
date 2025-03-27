@@ -1,11 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}'
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       screens: {
@@ -99,7 +95,8 @@ const config: Config = {
           300: '#ADB7BC',
           200: '#C9CFD2',
           100: '#E4E7E9',
-          50: '#F2F4F5'
+          50: '#F2F4F5',
+          '00': '#FFFFFF'
         }
       },
       fontSize: {
@@ -223,39 +220,156 @@ const config: Config = {
             fontWeight: '500'
           }
         ],
-        'body-large': [
+        'body-xxl-400': [
+          '1.5rem',
+          {
+            lineHeight: '2rem',
+            letterSpacing: '0rem',
+            fontWeight: '400'
+          }
+        ],
+        'body-xl-400': [
+          '1.25rem',
+          {
+            lineHeight: '1.75rem',
+            letterSpacing: '0rem',
+            fontWeight: '400'
+          }
+        ],
+        'body-xl-500': [
+          '1.25rem',
+          {
+            lineHeight: '1.75rem',
+            letterSpacing: '0rem',
+            fontWeight: '500'
+          }
+        ],
+        'body-xl-600': [
+          '1.25rem',
+          {
+            lineHeight: '1.75rem',
+            letterSpacing: '0rem',
+            fontWeight: '600'
+          }
+        ],
+        'body-large-400': [
           '1.125rem',
           {
             lineHeight: '1.5rem',
-            letterSpacing: '0rem'
+            letterSpacing: '0rem',
+            fontWeight: '400'
           }
         ],
-        'body-medium': [
+        'body-large-500': [
+          '1.125rem',
+          {
+            lineHeight: '1.5rem',
+            letterSpacing: '0rem',
+            fontWeight: '500'
+          }
+        ],
+        'body-large-600': [
+          '1.125rem',
+          {
+            lineHeight: '1.5rem',
+            letterSpacing: '0rem',
+            fontWeight: '600'
+          }
+        ],
+        'body-medium-400': [
           '1rem',
           {
             lineHeight: '1.5rem',
-            letterSpacing: '0rem'
+            letterSpacing: '0rem',
+            fontWeight: '400'
           }
         ],
-        'body-small': [
+        'body-medium-500': [
+          '1rem',
+          {
+            lineHeight: '1.5rem',
+            letterSpacing: '0rem',
+            fontWeight: '500'
+          }
+        ],
+        'body-medium-600': [
+          '1rem',
+          {
+            lineHeight: '1.5rem',
+            letterSpacing: '0rem',
+            fontWeight: '600'
+          }
+        ],
+        'body-small-400': [
           '0.875rem',
           {
             lineHeight: '1.25rem',
-            letterSpacing: '0rem'
+            letterSpacing: '0rem',
+            fontWeight: '400'
           }
         ],
-        'body-tiny': [
+        'body-small-500': [
+          '0.875rem',
+          {
+            lineHeight: '1.25rem',
+            letterSpacing: '0rem',
+            fontWeight: '500'
+          }
+        ],
+        'body-small-600': [
+          '0.875rem',
+          {
+            lineHeight: '1.25rem',
+            letterSpacing: '0rem',
+            fontWeight: '600'
+          }
+        ],
+        'body-tiny-400': [
           '0.75rem',
           {
             lineHeight: '1rem',
-            letterSpacing: '0rem'
+            letterSpacing: '0rem',
+            fontWeight: '400'
           }
         ],
-        'body-xs': [
+        'body-tiny-500': [
+          '0.75rem',
+          {
+            lineHeight: '1rem',
+            letterSpacing: '0rem',
+            fontWeight: '500'
+          }
+        ],
+        'body-tiny-600': [
+          '0.75rem',
+          {
+            lineHeight: '1rem',
+            letterSpacing: '0rem',
+            fontWeight: '600'
+          }
+        ],
+        'body-xs-400': [
           '0.6875rem',
           {
             lineHeight: '0.75rem',
-            letterSpacing: '0rem'
+            letterSpacing: '0rem',
+            fontWeight: '400'
+          }
+        ],
+        'body-xs-500': [
+          '0.6875rem',
+          {
+            lineHeight: '0.75rem',
+            letterSpacing: '0rem',
+            fontWeight: '500'
+          }
+        ],
+        'body-xs-600': [
+          '0.6875rem',
+          {
+            lineHeight: '0.75rem',
+            letterSpacing: '0rem',
+            fontWeight: '600'
           }
         ]
       }
