@@ -2,7 +2,6 @@
 
 import { cn } from '@/shared/lib/cn'
 import { Checks, Eye, EyeSlash, Warning } from '@phosphor-icons/react'
-import { useEffect } from 'react'
 import { Control, useController } from 'react-hook-form'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {

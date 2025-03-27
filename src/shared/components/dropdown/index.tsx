@@ -61,7 +61,7 @@ const Dropdown = ({ children, position = 'left', isOpen, onTrigger, onClose }: D
     return () => {
       document.removeEventListener('click', handleOutSideClick)
     }
-  }, [])
+  }, [onClose])
 
   // Handle resize
   useEffect(() => {

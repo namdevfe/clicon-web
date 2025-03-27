@@ -1,7 +1,5 @@
-import ApiError from '@/shared/lib/ApiError'
+import apiRoot from '@/constants/api'
 import tokenMethod from '@/shared/lib/storage'
-import { ApiResponse } from '@/types/global'
-import { StatusCodes } from 'http-status-codes'
 
 type CustomRequestInit = RequestInit & {
   baseURL?: string
@@ -14,7 +12,7 @@ export const isClient = typeof window !== 'undefined'
 const request = async <Response>(method: Method, url: string, options: CustomRequestInit) => {
   // If you pass options.baseURL is a empty string, it will call api to server of NextJS
   // Else it will call to server of NodeJS (Express)
-  const baseURL = options.baseURL === undefined ? process.env.NEXT_PUBLIC_BASE_URL_API_ENDPOINT : ''
+  const baseURL = options.baseURL === undefined ? apiRoot : ''
 
   // If you pass url endpoint with format includes '/auth/login' or 'auth/login' same correct
   const fullURL = url.startsWith('/') ? `${baseURL}${url}` : `${baseURL}/${url}`
@@ -29,6 +27,7 @@ const request = async <Response>(method: Method, url: string, options: CustomReq
     Authorization: `Bearer ${token?.accessToken}`
   }
 
+  // eslint-disable-next-line no-useless-catch
   try {
     const res = await fetch(fullURL, {
       ...options,
