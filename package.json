@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "cross-env BUILD_MODE=dev next dev",
-    "build": "cross-env BUILD_MODE=prod next build",
+    "dev": "cross-env NEXT_PUBLIC_BUILD_MODE=dev next dev",
+    "build": "cross-env NEXT_PUBLIC_BUILD_MODE=prod next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
