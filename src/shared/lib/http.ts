@@ -1,7 +1,7 @@
 import apiRoot from '@/constants/api'
 import tokenMethod from '@/shared/lib/storage'
 
-type CustomRequestInit = RequestInit & {
+type CustomRequestInit = Omit<RequestInit, 'method'> & {
   baseURL?: string
 }
 
@@ -9,16 +9,16 @@ type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
 export const isClient = typeof window !== 'undefined'
 
-const request = async <Response>(method: Method, url: string, options: CustomRequestInit) => {
+const request = async <Response>(method: Method, url: string, options?: CustomRequestInit) => {
   // If you pass options.baseURL is a empty string, it will call api to server of NextJS
   // Else it will call to server of NodeJS (Express)
-  const baseURL = options.baseURL === undefined ? apiRoot : ''
+  const baseURL = options?.baseURL === undefined ? apiRoot : ''
 
   // If you pass url endpoint with format includes '/auth/login' or 'auth/login' same correct
   const fullURL = url.startsWith('/') ? `${baseURL}${url}` : `${baseURL}/${url}`
 
   // If you pass body data request, it will auto change from object to string to send on request
-  const body = options?.body ? JSON.stringify(options.body) : undefined
+  const body = options?.body ? JSON.stringify(options?.body) : undefined
 
   const token = isClient && tokenMethod.get()
 
@@ -31,12 +31,12 @@ const request = async <Response>(method: Method, url: string, options: CustomReq
   try {
     const res = await fetch(fullURL, {
       ...options,
-      method,
-      body,
       headers: {
         ...baseHeaders,
-        ...options.headers
-      }
+        ...options?.headers
+      } as any,
+      method,
+      body
     })
 
     const result = (await res.json()) as Response

@@ -12,8 +12,8 @@ const DropdownAccount = () => {
           <User size={32} />
         </button>
       </Dropdown.Trigger>
-      <Dropdown.Content className='min-w-[424px] p-8 rounded -translate-x-[calc(100%-36px)] xs:-translate-x-[calc(100%-44px)]'>
-        <SignInForm />
+      <Dropdown.Content className='z-[101] min-w-[424px] p-8 rounded -translate-x-[calc(100%-36px)] xs:-translate-x-[calc(100%-44px)]'>
+        <SignInForm type='dropdown' />
       </Dropdown.Content>
     </Dropdown>
   )

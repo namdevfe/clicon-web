@@ -3,7 +3,7 @@ interface PublicLayoutProps {
 }
 
 const PublicLayout = ({ children }: PublicLayoutProps) => {
-  return <>{children}</>
+  return <div className='pt-[220px]'>{children}</div>
 }
 
 export default PublicLayout

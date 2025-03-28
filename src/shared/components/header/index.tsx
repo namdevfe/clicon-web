@@ -4,7 +4,7 @@ import HeaderTop from '@/shared/components/header/header-top'
 
 const Header = () => {
   return (
-    <header className='fixed top-0 left-0 w-full'>
+    <header className='fixed top-0 left-0 z-[100] w-full'>
       <HeaderTop />
       <HeaderMiddle />
       <HeaderBottom />

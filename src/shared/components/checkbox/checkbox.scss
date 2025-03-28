@@ -1,0 +1,7 @@
+.checkbox input:checked + label::before {
+  @apply bg-primary-500 border-primary-500;
+}
+
+.checkbox input:checked + label .icon-check {
+  @apply opacity-100 visible;
+}
