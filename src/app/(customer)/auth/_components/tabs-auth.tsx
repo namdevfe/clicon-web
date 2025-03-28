@@ -1,5 +1,5 @@
-import { SignInForm, SignUpForm } from '@/shared/components/auth'
-import Tabs from '@/shared/components/tabs'
+import { SignInForm, SignUpForm } from '@/components/auth'
+import Tabs from '@/components/tabs'
 
 const TabsAuth = () => {
   return (

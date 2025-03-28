@@ -1,6 +1,6 @@
 import TabsAuth from './_components/tabs-auth'
-import Breadcrumb from '@/shared/components/breadcrumb'
-import Container from '@/shared/components/container'
+import Breadcrumb from '@/components/breadcrumb'
+import Container from '@/components/container'
 import { CaretRight, House } from '@phosphor-icons/react/dist/ssr'
 import Link from 'next/link'
 

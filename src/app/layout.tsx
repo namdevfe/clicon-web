@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import Header from '@/shared/components/header'
+import Header from '@/components/header'
 import { Bounce, ToastContainer } from 'react-toastify'
 import '@/styles/globals.scss'
+import NavbarMobile from '@/components/navbar/navbar-mobile'
+import StoreProvider from '@/components/store-provider'
 
 const publicSans = localFont({
   src: [
@@ -42,21 +44,24 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={publicSans.className} suppressHydrationWarning>
-        <Header />
-        <ToastContainer
-          position='bottom-right'
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme='colored'
-          transition={Bounce}
-        />
-        {children}
+        <StoreProvider>
+          <NavbarMobile />
+          <Header />
+          <ToastContainer
+            position='bottom-right'
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme='colored'
+            transition={Bounce}
+          />
+          {children}
+        </StoreProvider>
       </body>
     </html>
   )
