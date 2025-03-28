@@ -1,5 +1,5 @@
-import { loginSchema } from '@/schemas/auth-schema'
 import { z } from 'zod'
+import { loginSchema, registerSchema } from '@/schemas/auth-schema'
 
 export interface Login {
   accessToken: string
@@ -9,3 +9,5 @@ export interface Login {
 export type LoginPayload = z.infer<typeof loginSchema>
 
 export type AuthPayload = Login
+
+export type RegisterPayload = z.infer<typeof registerSchema>

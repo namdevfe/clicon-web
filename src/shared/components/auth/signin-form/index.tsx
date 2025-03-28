@@ -2,6 +2,7 @@
 
 import { loginSchema } from '@/schemas/auth-schema'
 import authService from '@/services/auth-service'
+import { ButtonApple, ButtonGoogle } from '@/shared/components/auth'
 import Button, { buttonVariants } from '@/shared/components/button'
 import Input from '@/shared/components/input'
 import { cn } from '@/shared/lib/cn'
@@ -14,7 +15,11 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-const SignInForm = () => {
+interface SignInFormProps {
+  type: 'page' | 'dropdown'
+}
+
+const SignInForm = ({ type = 'dropdown' }: SignInFormProps) => {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const {
@@ -67,7 +72,7 @@ const SignInForm = () => {
 
   return (
     <div className='w-full'>
-      <h2 className='text-body-xl-600 text-center mb-5'>Sign in to your account</h2>
+      {type === 'dropdown' && <h2 className='text-body-xl-600 text-center mb-5'>Sign in to your account</h2>}
       <form method='post' onSubmit={handleSubmit(handleLoginSubmit)}>
         <Input disabled={isLoading} name='email' control={control} label='Email address' />
 
@@ -87,7 +92,7 @@ const SignInForm = () => {
         />
 
         <Button disabled={isLoading} type='submit' size='medium' className='w-full mt-[34px] mb-6'>
-          <span>Login</span>
+          <span>Sign in</span>
           <ArrowRight size={20} weight='bold' />
         </Button>
       </form>
@@ -95,15 +100,27 @@ const SignInForm = () => {
       {/* Create account */}
       <div>
         <p className='relative text-center text-gray-500 before:content-[""] before:absolute before:left-0 before:top-2/4 before:z-[11] before:-translate-y-2/4 before:block before:w-full before:h-[2px] before:bg-gray-100'>
-          <span className='relative z-20 inline-block px-2 bg-white'>Don&apos;t have an account?</span>
+          <span className='relative z-20 inline-block px-2 bg-white'>
+            {/* eslint-disable-next-line quotes */}
+            {type === 'dropdown' ? "Don't have an account?" : 'or'}
+          </span>
         </p>
 
-        <Link
-          href='/sign-up'
-          className={cn(buttonVariants({ outlined: 'primary-light', size: 'medium', className: 'w-full mt-3' }))}
-        >
-          Create account
-        </Link>
+        {type === 'dropdown' && (
+          <Link
+            href='/auth'
+            className={cn(buttonVariants({ outlined: 'primary-light', size: 'medium', className: 'w-full mt-3' }))}
+          >
+            Create account
+          </Link>
+        )}
+
+        {type === 'page' && (
+          <div className='mt-3 flex flex-col gap-3'>
+            <ButtonGoogle type='signin' />
+            <ButtonApple type='signin' />
+          </div>
+        )}
       </div>
     </div>
   )

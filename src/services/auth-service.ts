@@ -1,10 +1,13 @@
 import http from '@/shared/lib/http'
-import { AuthPayload, Login, LoginPayload } from '@/types/auth'
+import { AuthPayload, Login, LoginPayload, RegisterPayload } from '@/types/auth'
 import { ApiResponse } from '@/types/global'
 
 const authService = {
   login(payload: LoginPayload) {
     return http.post<ApiResponse<Login>>('/auth/login', payload)
+  },
+  register(payload: RegisterPayload) {
+    return http.post<ApiResponse<undefined>>('/auth/register', payload)
   },
   // Api auth of next server
   auth(payload: AuthPayload) {

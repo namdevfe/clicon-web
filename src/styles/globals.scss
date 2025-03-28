@@ -4,14 +4,31 @@
 
 @layer base {
   body {
-    @apply overflow-x-hidden max-w-[2560px] bg-gray-00 text-body-small-400 mx-auto text-gray-900;
+    @apply overflow-x-hidden overflow-y-scroll max-w-[2560px] bg-gray-00 text-body-small-400 mx-auto text-gray-900;
   }
 
   button {
     user-select: none;
   }
 
-  input {
+  input,
+  button {
     @apply outline-none;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-[6px];
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary-500;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary-700;
   }
 }
