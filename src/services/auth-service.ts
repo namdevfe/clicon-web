@@ -1,4 +1,4 @@
-import http from '@/shared/lib/http'
+import http from '@/lib/http'
 import { AuthPayload, Login, LoginPayload, RegisterPayload } from '@/types/auth'
 import { ApiResponse } from '@/types/global'
 
