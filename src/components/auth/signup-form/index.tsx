@@ -13,11 +13,14 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 
 const SignUpForm = () => {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false)
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const router = useRouter()
+
   const { handleSubmit, control } = useForm<RegisterPayload>({
     defaultValues: {
       firstName: '',
@@ -50,6 +53,7 @@ const SignUpForm = () => {
       // If you register account is successfully, system will send OTP your email address
       toast.success(res?.message)
       // In next step: change screen to verify OTP
+      router.push(`/auth/email-verification?email=${payload.email}`)
     } catch (error: any) {
       toast.error(error?.message)
     } finally {
@@ -92,6 +96,7 @@ const SignUpForm = () => {
         <Input
           name='isAgree'
           control={control}
+          disabled={isLoading}
           renderProps={(props) => {
             return (
               <Checkbox
@@ -102,7 +107,13 @@ const SignUpForm = () => {
           }}
         />
 
-        <Button disabled={isLoading} type='submit' size='medium' className='w-full mt-[34px] mb-6'>
+        <Button
+          disabled={isLoading}
+          isLoading={isLoading}
+          type='submit'
+          size='medium'
+          className='w-full mt-[34px] mb-6'
+        >
           <span>Sign up</span>
           <ArrowRight size={20} weight='bold' />
         </Button>

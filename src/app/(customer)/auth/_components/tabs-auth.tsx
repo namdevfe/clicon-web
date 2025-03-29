@@ -1,9 +1,15 @@
+'use client'
+
 import { SignInForm, SignUpForm } from '@/components/auth'
 import Tabs from '@/components/tabs'
+import { useSearchParams } from 'next/navigation'
 
 const TabsAuth = () => {
+  const searchParams = useSearchParams()
+  const isVerified = searchParams.get('isVerified') || ''
+
   return (
-    <Tabs defaultValue='sign-up' className='min-w-[424px] bg-white shadow-md rounded'>
+    <Tabs defaultValue={isVerified ? 'sign-in' : 'sign-up'} className='w-[424px] bg-white shadow-md rounded'>
       <Tabs.List>
         <Tabs.Trigger value='sign-in' className='py-4 text-gray-600 text-xl font-semibold tracking-tighter capitalize'>
           Sign in

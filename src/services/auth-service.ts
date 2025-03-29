@@ -1,5 +1,5 @@
 import http from '@/lib/http'
-import { AuthPayload, Login, LoginPayload, RegisterPayload } from '@/types/auth'
+import { AuthPayload, EmailVerificationPayload, Login, LoginPayload, RegisterPayload } from '@/types/auth'
 import { ApiResponse } from '@/types/global'
 
 const authService = {
@@ -8,6 +8,9 @@ const authService = {
   },
   register(payload: RegisterPayload) {
     return http.post<ApiResponse<undefined>>('/auth/register', payload)
+  },
+  verifyEmail(payload: EmailVerificationPayload) {
+    return http.post<ApiResponse<undefined>>('/auth/verify-otp', payload)
   },
   // Api auth of next server
   auth(payload: AuthPayload) {

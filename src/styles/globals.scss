@@ -16,6 +16,11 @@
     @apply outline-none;
   }
 
+  input::-webkit-inner-spin-button,
+  input::-webkit-outer-spin-button {
+    @apply appearance-none m-0;
+  }
+
   ::-webkit-scrollbar {
     @apply w-[6px];
   }

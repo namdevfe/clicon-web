@@ -1,4 +1,5 @@
 'use client'
+import Loading from '@/components/loading'
 import { cn } from '@/lib/cn'
 import { cva, type VariantProps } from 'class-variance-authority'
 
@@ -60,6 +61,7 @@ interface ButtonProps
   children: React.ReactNode
   beforeIcon?: React.ReactNode
   afterIcon?: React.ReactNode
+  isLoading?: boolean
 }
 
 const Button = ({
@@ -71,6 +73,7 @@ const Button = ({
   outlined,
   beforeIcon,
   afterIcon,
+  isLoading = false,
   onClick,
   ...restProps
 }: ButtonProps) => {
@@ -81,6 +84,7 @@ const Button = ({
       disabled={disabled || undefined}
       {...restProps}
     >
+      {isLoading && <Loading isLoading={isLoading} />}
       {beforeIcon && <span>{beforeIcon}</span>}
       {children}
       {afterIcon && <span>{afterIcon}</span>}
