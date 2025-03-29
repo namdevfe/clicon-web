@@ -91,7 +91,13 @@ const SignInForm = ({ type = 'dropdown' }: SignInFormProps) => {
           onShowPassword={hanldeToggleShowPassword}
         />
 
-        <Button disabled={isLoading} type='submit' size='medium' className='w-full mt-[34px] mb-6'>
+        <Button
+          disabled={isLoading}
+          isLoading={isLoading}
+          type='submit'
+          size='medium'
+          className='w-full mt-[34px] mb-6'
+        >
           <span>Sign in</span>
           <ArrowRight size={20} weight='bold' />
         </Button>

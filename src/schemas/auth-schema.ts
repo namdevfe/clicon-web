@@ -30,3 +30,7 @@ export const registerSchema = z
       })
     }
   })
+
+// export const emailVerificationSchema = z.object({
+//   otpCode1: z.string().min(1, 'Code is required').max(6, 'Code must incluces 6 numbers')
+// })

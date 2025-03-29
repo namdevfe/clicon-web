@@ -2,15 +2,13 @@
 
 import Button from '@/components/button'
 import Container from '@/components/container'
+import { useAppDispatch, useAppSelector } from '@/store'
+import { handleCloseDiscount, selectIsShowDiscount } from '@/store/reducers/appSlice'
 import { ArrowRight, X } from '@phosphor-icons/react'
-import { useState } from 'react'
 
 const HeaderTop = () => {
-  const [isShowDiscount, setIsShowDiscount] = useState<boolean>(true)
-
-  const handleCloseDiscount = () => {
-    setIsShowDiscount(false)
-  }
+  const isShowDiscount = useAppSelector(selectIsShowDiscount)
+  const dispatch = useAppDispatch()
 
   if (isShowDiscount) {
     return (
@@ -42,7 +40,7 @@ const HeaderTop = () => {
         {/* Close button */}
         <Button
           className='absolute t-6 right-1 sm:right-6 bottom-6 bg-gray-800 text-white min-w-8 w-8 h-8 gap-x-0 p-2 hover:bg-gray-800'
-          onClick={handleCloseDiscount}
+          onClick={() => dispatch(handleCloseDiscount())}
         >
           <X size={16} />
         </Button>
