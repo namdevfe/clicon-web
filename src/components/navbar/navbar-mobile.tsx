@@ -1,8 +1,8 @@
 'use client'
 
 import Menu from '@/components/menu'
-import { NAVBAR_ITEMS, NAVBAR_MENU_ITEMS } from '@/constants/menu'
 import Tabs from '@/components/tabs'
+import { NAVBAR_ITEMS, NAVBAR_MENU_ITEMS } from '@/constants/menu'
 import { cn } from '@/lib/cn'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { handleCloseNavMobile, selectIsShowNavMobile } from '@/store/reducers/appSlice'

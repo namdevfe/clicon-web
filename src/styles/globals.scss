@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --w-sidebar: 264px;
+}
+
 @layer base {
   body {
     @apply overflow-x-hidden overflow-y-scroll max-w-[2560px] bg-gray-00 text-body-small-400 mx-auto text-gray-900;
