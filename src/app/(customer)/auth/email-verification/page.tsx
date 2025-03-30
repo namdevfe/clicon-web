@@ -29,9 +29,9 @@ const EmailVerificationPage = () => {
         </Container>
       </div>
 
-      <div className='flex items-center justify-center py-[100px]'>
+      <Container className='flex items-center justify-center py-[100px]'>
         <EmailVerificationForm />
-      </div>
+      </Container>
     </main>
   )
 }
