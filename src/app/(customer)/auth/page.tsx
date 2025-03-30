@@ -36,9 +36,9 @@ const AuthPage = () => {
       </div>
 
       {/* Form */}
-      <div className='flex items-center justify-center py-[100px]'>
+      <Container className='flex items-center justify-center py-[100px]'>
         <TabsAuth />
-      </div>
+      </Container>
     </main>
   )
 }
