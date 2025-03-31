@@ -1,5 +1,39 @@
-import Sidebar, { SIDEBAR_MENU_ITEMS } from '@/components/sidebar'
+import Sidebar from '@/components/sidebar'
+import { SidebarItemType } from '@/components/sidebar/sidebar-item'
+import { GearSix, Stack, Users } from '@phosphor-icons/react/dist/ssr'
 import Link from 'next/link'
+
+export const ADMIN_SIDEBAR_MENU_ITEMS: SidebarItemType[] = [
+  {
+    id: 'dashboard',
+    icon: <Stack size={20} />,
+    title: 'Dashboard',
+    href: '/admin/dashboard'
+  },
+  {
+    id: 'users',
+    icon: <Users size={20} />,
+    title: 'Users',
+    href: '/admin/users'
+  },
+  {
+    id: 'settings',
+    icon: <GearSix size={20} />,
+    title: 'Settings',
+    child: [
+      {
+        id: 'roles',
+        title: 'Roles',
+        href: '/admin/settings/roles'
+      },
+      {
+        id: 'permissions',
+        title: 'Permissions',
+        href: '/admin/settings/permissions'
+      }
+    ]
+  }
+]
 
 const AdminSidebar = () => {
   return (
@@ -19,7 +53,7 @@ const AdminSidebar = () => {
         </svg>
       </Link>
 
-      <Sidebar items={SIDEBAR_MENU_ITEMS} />
+      <Sidebar items={ADMIN_SIDEBAR_MENU_ITEMS} />
     </aside>
   )
 }
