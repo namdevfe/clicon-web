@@ -1,6 +1,14 @@
 import http from '@/lib/http'
-import { AuthPayload, EmailVerificationPayload, Login, LoginPayload, RegisterPayload } from '@/types/auth'
+import {
+  AuthPayload,
+  EmailVerificationPayload,
+  Login,
+  LoginPayload,
+  LogoutPayload,
+  RegisterPayload
+} from '@/types/auth'
 import { ApiResponse } from '@/types/global'
+import { User } from '@/types/user'
 
 const authService = {
   login(payload: LoginPayload) {
@@ -18,15 +26,25 @@ const authService = {
       baseURL: ''
     })
   },
-  getProfile(accessToken: string) {
-    return http.get('/auth/get-profile', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
+  getProfile() {
+    return http.get<ApiResponse<User>>('/auth/get-profile')
+  },
+  setProfileToNextServer(payload: User) {
+    return http.post('/api/auth/profile', payload, {
+      baseURL: ''
     })
   },
-  getProfileClient() {
-    return http.get('/auth/get-profile')
+  logout(payload: LogoutPayload) {
+    return http.put<ApiResponse<undefined>>('/auth/logout', payload)
+  },
+  logoutFromNextServer() {
+    return http.put(
+      '/api/auth/logout',
+      {},
+      {
+        baseURL: ''
+      }
+    )
   }
 }
 

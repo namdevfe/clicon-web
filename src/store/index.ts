@@ -1,4 +1,5 @@
 import appReducer from '@/store/reducers/appSlice'
+import authReducer from '@/store/reducers/authSlice'
 import counterReducer from '@/store/reducers/counterSlice'
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, useStore } from 'react-redux'
@@ -7,7 +8,8 @@ export const makeStore = () => {
   return configureStore({
     reducer: {
       counter: counterReducer,
-      app: appReducer
+      app: appReducer,
+      auth: authReducer
     }
   })
 }

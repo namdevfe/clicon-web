@@ -14,6 +14,10 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import tokenMethod from '@/lib/storage'
 import { cn } from '@/lib/cn'
+import { STORAGE } from '@/constants/storage'
+import { useAppDispatch } from '@/store'
+import { setProfile } from '@/store/reducers/authSlice'
+import { useRouter } from 'next/navigation'
 
 interface SignInFormProps {
   type: 'page' | 'dropdown'
@@ -22,6 +26,8 @@ interface SignInFormProps {
 const SignInForm = ({ type = 'dropdown' }: SignInFormProps) => {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const router = useRouter()
+  const dispatch = useAppDispatch()
   const {
     handleSubmit,
     control,
@@ -54,8 +60,18 @@ const SignInForm = ({ type = 'dropdown' }: SignInFormProps) => {
         // Call api auth to set token on cookies
         await authService.auth(token)
         // Toast success
-        toast.success(res.message)
+
+        // Get profile
+        const profileRes = await authService.getProfile()
+        if (!!profileRes?.data) {
+          await authService.setProfileToNextServer(profileRes.data)
+          localStorage.setItem(STORAGE.PROFILE, JSON.stringify(profileRes.data))
+          dispatch(setProfile(profileRes.data))
+        }
+
         reset({ email: '', password: '' })
+        router.push('/')
+        toast.success(res.message)
       }
     } catch (error: any) {
       toast.error(error?.message || 'Something went wrongs')

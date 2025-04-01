@@ -1,3 +1,4 @@
 export const STORAGE = {
-  AUTH: 'auth'
+  AUTH: 'auth',
+  PROFILE: 'profile'
 }

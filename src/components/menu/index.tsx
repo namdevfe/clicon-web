@@ -8,6 +8,8 @@ import { usePathname } from 'next/navigation'
 import { MouseEvent, useState } from 'react'
 
 export interface MenuItem {
+  icon?: React.ReactNode
+  menuKey?: string
   href?: string
   title: React.ReactNode
   child?: MenuItem[]
@@ -20,11 +22,12 @@ interface MenuItemProps extends MenuItem {
 }
 
 interface MenuProps {
-  items?: MenuItem[]
+  items: MenuItem[]
   className?: string
+  onChange?: (item: MenuItem) => void
 }
 
-const Menu = ({ items = [], className = '' }: MenuProps) => {
+const Menu = ({ items = [], className = '', onChange }: MenuProps) => {
   const pathname = usePathname()
   const [history, setHistory] = useState<{ data: MenuItem[] }[]>([{ data: items }])
 
@@ -44,6 +47,8 @@ const Menu = ({ items = [], className = '' }: MenuProps) => {
             e.stopPropagation()
             if (isParent) {
               setHistory((prev) => [...prev, { data: item?.child || [] }])
+            } else {
+              onChange?.(item)
             }
           }}
         />
@@ -76,6 +81,7 @@ const Menu = ({ items = [], className = '' }: MenuProps) => {
 }
 
 const MenuItem = ({
+  icon,
   href,
   title,
   child = [],
@@ -97,7 +103,10 @@ const MenuItem = ({
         )}
         onClick={onClick}
       >
-        <span>{title}</span>
+        <div className='flex items-center gap-2'>
+          {icon && <span>{icon}</span>}
+          <span>{title}</span>
+        </div>
         {isParent && <CaretRight size={12} weight='bold' />}
       </Link>
     </li>
