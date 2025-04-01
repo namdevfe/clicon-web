@@ -1,23 +1,22 @@
 'use client'
 
-import { loginSchema } from '@/schemas/auth-schema'
-import authService from '@/services/auth-service'
 import { ButtonApple, ButtonGoogle } from '@/components/auth'
 import Button, { buttonVariants } from '@/components/button'
 import Input from '@/components/input'
+import { cn } from '@/lib/cn'
+import tokenMethod from '@/lib/storage'
+import { loginSchema } from '@/schemas/auth-schema'
+import authService from '@/services/auth-service'
+import { useAppDispatch } from '@/store'
+import { getProfile } from '@/store/reducers/authSlice'
 import { Login, LoginPayload } from '@/types/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from '@phosphor-icons/react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import tokenMethod from '@/lib/storage'
-import { cn } from '@/lib/cn'
-import { STORAGE } from '@/constants/storage'
-import { useAppDispatch } from '@/store'
-import { setProfile } from '@/store/reducers/authSlice'
-import { useRouter } from 'next/navigation'
 
 interface SignInFormProps {
   type: 'page' | 'dropdown'
@@ -59,19 +58,14 @@ const SignInForm = ({ type = 'dropdown' }: SignInFormProps) => {
         tokenMethod.set(token)
         // Call api auth to set token on cookies
         await authService.auth(token)
-        // Toast success
-
-        // Get profile
-        const profileRes = await authService.getProfile()
-        if (!!profileRes?.data) {
-          await authService.setProfileToNextServer(profileRes.data)
-          localStorage.setItem(STORAGE.PROFILE, JSON.stringify(profileRes.data))
-          dispatch(setProfile(profileRes.data))
+        // Dispatch action getProfile on redux store
+        const profileResponse = await dispatch(getProfile()).unwrap()
+        if (!!profileResponse) {
+          await authService.setProfileToNextServer(profileResponse)
+          reset({ email: '', password: '' })
+          router.push('/')
+          toast.success(res.message)
         }
-
-        reset({ email: '', password: '' })
-        router.push('/')
-        toast.success(res.message)
       }
     } catch (error: any) {
       toast.error(error?.message || 'Something went wrongs')

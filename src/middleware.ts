@@ -20,27 +20,35 @@ export function middleware(request: NextRequest) {
   const cookies = !!request.cookies.get(STORAGE.AUTH)?.value
     ? (JSON.parse(request.cookies.get(STORAGE.AUTH)?.value || '') as Login)
     : null
-  const profileCookies = request.cookies.get(STORAGE.PROFILE)?.value
+  const profile = request.cookies.get(STORAGE.PROFILE)?.value
     ? (JSON.parse(request.cookies.get(STORAGE.PROFILE)?.value as string) as User)
     : null
   const accessToken = cookies?.accessToken || ''
-  const isCustomer = profileCookies?.role.name.toLowerCase() === 'customer'
-  const isAdmin = profileCookies?.role.name.toLowerCase() === 'admin'
+  const isCustomer = profile?.role.name.toLowerCase() === 'customer'
+  const isAdmin = profile?.role.name.toLowerCase() === 'admin'
 
   // If haven't accessToken & role have not admin role is redirect to permission deined page
-  if (!accessToken && ADMIN_PATHS.some((path) => path.includes(pathname))) {
+  if (
+    (!accessToken && ADMIN_PATHS.some((path) => path.includes(pathname))) ||
+    CUSTOMER_PATHS.some((path) => path.includes(pathname))
+  ) {
     return NextResponse.redirect(new URL('/auth', request.url))
   }
 
+  if (
+    !profile &&
+    (CUSTOMER_PATHS.some((path) => path.startsWith(pathname)) || ADMIN_PATHS.some((path) => path.startsWith(pathname)))
+  ) {
+    return NextResponse.redirect(new URL('/permission-denied', request.url))
+  }
+
   // If have accessToken then redirect to home page
-  if (accessToken) {
-    if (AUTH_PATHS.some((path) => path.includes(pathname))) {
-      return NextResponse.redirect(new URL('/', request.url))
-    } else if (ADMIN_PATHS.some((path) => path.includes(pathname) && isCustomer)) {
-      return NextResponse.redirect(new URL('/permission-denied', request.url))
-    } else if (CUSTOMER_PATHS.some((path) => path.includes(pathname) && isAdmin)) {
-      return NextResponse.redirect(new URL('/permission-denied', request.url))
-    }
+  if (AUTH_PATHS.some((path) => path.includes(pathname))) {
+    return NextResponse.redirect(new URL('/', request.url))
+  } else if (ADMIN_PATHS.some((path) => path.includes(pathname) && isCustomer)) {
+    return NextResponse.redirect(new URL('/permission-denied', request.url))
+  } else if (CUSTOMER_PATHS.some((path) => path.includes(pathname) && isAdmin)) {
+    return NextResponse.redirect(new URL('/permission-denied', request.url))
   }
 
   // return NextResponse.next()
