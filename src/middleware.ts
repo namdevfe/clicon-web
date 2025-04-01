@@ -1,8 +1,11 @@
+import { STORAGE } from '@/constants/storage'
 import { Login } from '@/types/auth'
+import { User } from '@/types/user'
 import { NextResponse } from 'next/server'
 import { NextRequest } from 'next/server'
 
 const AUTH_PATHS = ['/auth', '/auth/email-verification']
+const CUSTOMER_PATHS = ['/profile']
 const ADMIN_PATHS = [
   '/admin',
   '/admin/dashboard',
@@ -14,26 +17,36 @@ const ADMIN_PATHS = [
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-  const cookies = !!request.cookies.get('auth')?.value
-    ? (JSON.parse(request.cookies.get('auth')?.value || '') as Login)
+  const cookies = !!request.cookies.get(STORAGE.AUTH)?.value
+    ? (JSON.parse(request.cookies.get(STORAGE.AUTH)?.value || '') as Login)
+    : null
+  const profileCookies = request.cookies.get(STORAGE.PROFILE)?.value
+    ? (JSON.parse(request.cookies.get(STORAGE.PROFILE)?.value as string) as User)
     : null
   const accessToken = cookies?.accessToken || ''
-  const isAdmin = false
-
-  // If have accessToken then redirect to home page
-  if (!!accessToken && AUTH_PATHS.some((path) => path.includes(pathname))) {
-    return NextResponse.redirect(new URL('/', request.url))
-  }
+  const isCustomer = profileCookies?.role.name.toLowerCase() === 'customer'
+  const isAdmin = profileCookies?.role.name.toLowerCase() === 'admin'
 
   // If haven't accessToken & role have not admin role is redirect to permission deined page
-  if (!accessToken && ADMIN_PATHS.some((path) => path.includes(pathname)) && !isAdmin) {
+  if (!accessToken && ADMIN_PATHS.some((path) => path.includes(pathname))) {
     return NextResponse.redirect(new URL('/auth', request.url))
   }
 
-  return NextResponse.next()
+  // If have accessToken then redirect to home page
+  if (accessToken) {
+    if (AUTH_PATHS.some((path) => path.includes(pathname))) {
+      return NextResponse.redirect(new URL('/', request.url))
+    } else if (ADMIN_PATHS.some((path) => path.includes(pathname) && isCustomer)) {
+      return NextResponse.redirect(new URL('/permission-denied', request.url))
+    } else if (CUSTOMER_PATHS.some((path) => path.includes(pathname) && isAdmin)) {
+      return NextResponse.redirect(new URL('/permission-denied', request.url))
+    }
+  }
+
+  // return NextResponse.next()
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/auth/:path*', '/admin/:path*']
+  matcher: ['/auth/:path*', '/admin/:path*', '/profile']
 }

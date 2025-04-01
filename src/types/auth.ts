@@ -15,3 +15,8 @@ export type RegisterPayload = z.infer<typeof registerSchema>
 export type EmailVerificationPayload = {
   otpCode: string
 }
+
+export type LogoutPayload = {
+  _id: string
+  refreshToken: string
+}
