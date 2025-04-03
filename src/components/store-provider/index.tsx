@@ -1,28 +1,24 @@
 'use client'
 
+import { isClient } from '@/lib/http'
+import tokenMethod from '@/lib/storage'
+import { AppStore, makeStore } from '@/store'
+import { getProfile } from '@/store/reducers/authSlice'
 import { useRef } from 'react'
 import { Provider } from 'react-redux'
-import { makeStore, AppStore } from '@/store'
-// import { STORAGE } from '@/constants/storage'
-// import { isClient } from '@/lib/http'
-// import { setProfile } from '@/store/reducers/authSlice'
-// import tokenMethod from '@/lib/storage'
 
 export default function StoreProvider({ children }: { children: React.ReactNode }) {
   const storeRef = useRef<AppStore>(undefined)
+  const token = isClient ? tokenMethod.get() : null
 
   if (!storeRef.current) {
     // Create the store instance the first time this renders
     storeRef.current = makeStore()
-    // storeRef.current.dispatch(setProfile(profile))
+
+    if (token) {
+      storeRef.current.dispatch(getProfile())
+    }
   }
-
-  // useEffect(() => {
-  //   if (isClient) {
-  //     const token = tokenMethod.get()
-
-  //   }
-  // }, [])
 
   return <Provider store={storeRef.current}>{children}</Provider>
 }

@@ -22,7 +22,7 @@ const Checkbox = ({ labelCheckbox, name, control, disabled = false, ...restProps
 
   return (
     <div className='flex gap-2 checkbox'>
-      <input className='hidden' type='checkbox' id={name} disabled={disabled} {...restProps} {...field} />
+      <input className='hidden' type='checkbox' id={name} disabled={disabled} {...field} {...restProps} />
       <label
         className={cn(
           'relative pl-7 before:absolute before:left-0 before:top-2/4 before:-translate-y-2/4 before:content-[""] before:block before:size-5 before:border-2 before:border-gray-200 before:rounded-sm bg-white cursor-pointer before:transition-colors before:duration-300 before:hover:border-primary-500 before:z-0',

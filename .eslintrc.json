@@ -40,6 +40,7 @@
     "comma-spacing": 1,
     "arrow-spacing": 1,
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-expressions": "off",
 
     // Prettier rules
     "prettier/prettier": [

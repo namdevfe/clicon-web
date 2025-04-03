@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --w-sidebar: 264px;
+  --w-sidebar: 56px;
   --h-admin-header: 64px;
+
+  @media (min-width: 992px) {
+    --w-sidebar: 264px;
+  }
 }
 
 @layer base {

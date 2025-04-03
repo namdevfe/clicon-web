@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { loginSchema, registerSchema } from '@/schemas/auth-schema'
+import { User } from '@/types/user'
 
 export interface Login {
   accessToken: string
@@ -19,4 +20,11 @@ export type EmailVerificationPayload = {
 export type LogoutPayload = {
   _id: string
   refreshToken: string
+}
+
+export type ProfileResponse = User & {
+  role: {
+    _id: string
+    name: string
+  }
 }

@@ -6,18 +6,20 @@ import DropdownProvider, { DropdownContextType } from '@/components/dropdown/dro
 import DropdownTrigger from '@/components/dropdown/dropdown-trigger'
 import { Position } from '@/types/global'
 import { useEffect, useRef, useState } from 'react'
+import { cn } from '@/lib/cn'
 
 interface DropdownProps {
   children: React.ReactNode
   position?: Position
   isOpen?: boolean
+  className?: string
   onTrigger?: () => void
   onClose?: () => void
 }
 
 export type Coord = Pick<DOMRect, 'width' | 'height' | 'left' | 'right' | 'top' | 'bottom' | 'x' | 'y'>
 
-const Dropdown = ({ children, position = 'left', isOpen, onTrigger, onClose }: DropdownProps) => {
+const Dropdown = ({ children, position = 'left', isOpen, className = '', onTrigger, onClose }: DropdownProps) => {
   const [isShowDropdown, setIsShowDropdown] = useState<boolean>(false)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
   const { coord, setCoord } = useRectResize(dropdownRef)
@@ -67,6 +69,7 @@ const Dropdown = ({ children, position = 'left', isOpen, onTrigger, onClose }: D
   return (
     <DropdownProvider value={value}>
       <div
+        className={cn(className)}
         ref={dropdownRef}
         onClick={() => {
           const currentCoord = dropdownRef.current?.getBoundingClientRect()

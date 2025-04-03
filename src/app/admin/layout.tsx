@@ -8,9 +8,7 @@ interface AdminLayoutProps {
 const AdminLayout = ({ children }: AdminLayoutProps) => {
   return (
     <div>
-      <div className='fixed left-0 top-0 h-screen w-[var(--w-sidebar)] shadow-md'>
-        <AdminSidebar />
-      </div>
+      <AdminSidebar />
       <div className='w-[calc(100%-var(--w-sidebar))] ml-auto'>
         <AdminHeader />
         <main className='pt-[var(--h-admin-header)]'>{children}</main>

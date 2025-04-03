@@ -12,7 +12,7 @@ interface LanguageItem {
   name: string
 }
 
-const LANGUAGES: LanguageItem[] = [
+export const LANGUAGES: LanguageItem[] = [
   {
     icon: '/images/icon-usa.svg',
     code: 'en',

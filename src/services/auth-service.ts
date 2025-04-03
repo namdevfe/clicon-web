@@ -5,6 +5,7 @@ import {
   Login,
   LoginPayload,
   LogoutPayload,
+  ProfileResponse,
   RegisterPayload
 } from '@/types/auth'
 import { ApiResponse } from '@/types/global'
@@ -27,7 +28,7 @@ const authService = {
     })
   },
   getProfile() {
-    return http.get<ApiResponse<User>>('/auth/get-profile')
+    return http.get<ApiResponse<ProfileResponse>>('/auth/get-profile')
   },
   setProfileToNextServer(payload: User) {
     return http.post('/api/auth/profile', payload, {

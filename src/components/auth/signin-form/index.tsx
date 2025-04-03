@@ -23,7 +23,6 @@ interface SignInFormProps {
 }
 
 const SignInForm = ({ type = 'dropdown' }: SignInFormProps) => {
-  const [isShowPassword, setIsShowPassword] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
   const dispatch = useAppDispatch()
@@ -40,10 +39,6 @@ const SignInForm = ({ type = 'dropdown' }: SignInFormProps) => {
     },
     resolver: zodResolver(loginSchema)
   })
-
-  const hanldeToggleShowPassword = () => {
-    setIsShowPassword((prev) => !prev)
-  }
 
   const handleLoginSubmit = async (value: LoginPayload) => {
     setIsLoading(true)
@@ -91,14 +86,12 @@ const SignInForm = ({ type = 'dropdown' }: SignInFormProps) => {
           name='password'
           control={control}
           isPassword
-          type={isShowPassword ? 'text' : 'password'}
           label='Password'
           extraActions={
             <Link href='/forgot-password' className='text-body-small-500 text-secondary-500' tabIndex={-1}>
               Forgot password
             </Link>
           }
-          onShowPassword={hanldeToggleShowPassword}
         />
 
         <Button

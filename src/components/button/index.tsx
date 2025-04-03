@@ -9,11 +9,13 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary: 'bg-primary-500 text-white hover:bg-primary-600',
-        warning: 'bg-warning-500 text-gray-900 hover:bg-warning-400'
+        warning: 'bg-warning-500 text-gray-900 hover:bg-warning-400',
+        danger: 'bg-danger-500 text-white hover:bg-danger-600'
       },
       size: {
         large: 'min-w-[117px] h-[56px] px-8 rounded-[3px] gap-3',
-        medium: 'min-w-[94px] h-12 px-6 rounded-sm text-sm leading-[3rem] gap-2'
+        medium: 'min-w-[94px] h-12 px-6 rounded-sm text-sm leading-[3rem] gap-2',
+        small: 'min-w-fit h-9 px-4 text-xs leading-[1.25rem] tracking-normal gap-1'
       },
       outlined: {
         'primary-dark':
@@ -50,6 +52,11 @@ export const buttonVariants = cva(
         variant: 'warning',
         disabled: true,
         class: 'bg-warning-200 text-white'
+      },
+      {
+        variant: 'danger',
+        disabled: true,
+        class: 'bg-danger-200'
       }
     ]
   }

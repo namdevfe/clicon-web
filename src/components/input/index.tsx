@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/cn'
 import { Checks, Eye, EyeSlash, Warning } from '@phosphor-icons/react'
-import { forwardRef } from 'react'
+import { forwardRef, useState } from 'react'
 import { Control, useController } from 'react-hook-form'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -24,7 +24,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
     label,
     extraActions,
-    type = 'text',
     isPassword = false,
     isOTP = false,
     name,
@@ -34,7 +33,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     classNameWrapper = '',
     errorMessage = '',
     renderProps = undefined,
-    onShowPassword,
     ...inputProps
   } = props
 
@@ -42,9 +40,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     field,
     fieldState: { error, isDirty }
   } = useController({ name, control })
+  const [isShowPassword, setIsShowPassword] = useState<boolean>(false)
+
+  const hanldeToggleShowPassword = () => {
+    setIsShowPassword((prev) => !prev)
+  }
 
   return (
-    <div className={cn('form-group [&+&]:mt-8', classNameWrapper)}>
+    <div className={cn('form-group [&+&]:mt-4', classNameWrapper)}>
       {(label || extraActions) && (
         <div className='flex items-center justify-between text-body-small-400 text-gray-900 mb-2'>
           {label && (
@@ -77,23 +80,21 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                 'bg-success-50': isDirty && !error?.message
               }
             )}
-            type={type}
+            type={isPassword && !isShowPassword ? 'password' : 'text'}
             disabled={disabled}
             {...field}
             {...inputProps}
             ref={ref}
           />
 
-          {error?.message && <p className='text-danger-500 text-body-small-400 mt-1'>{error.message}</p>}
-
           {/* Type: password */}
           {isPassword && (
             <button
               type='button'
               className='absolute top-2/4 right-[17px] -translate-y-2/4 text-gray-900'
-              onClick={() => onShowPassword?.()}
+              onClick={hanldeToggleShowPassword}
             >
-              {type === 'text' ? <Eye size={20} /> : <EyeSlash size={20} />}
+              {isShowPassword ? <Eye size={20} /> : <EyeSlash size={20} />}
             </button>
           )}
 
@@ -108,6 +109,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           )}
         </div>
       )}
+      {<p className='text-danger-500 text-body-small-400 mt-1 min-h-5'>{error?.message}</p>}
     </div>
   )
 })
