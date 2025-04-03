@@ -10,8 +10,12 @@ const userService = {
       }
     })
   },
-  addUser(payload: AddUserPayload) {
-    return http.post<ApiResponse<undefined>>('/users/add-user', payload)
+  addUser(payload: AddUserPayload, accessToken?: string) {
+    return http.post<ApiResponse<undefined>>('/users/add-user', payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
   }
 }
 

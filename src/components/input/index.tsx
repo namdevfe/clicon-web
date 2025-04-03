@@ -17,7 +17,6 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string
   // eslint-disable-next-line no-unused-vars
   renderProps?: (props: InputProps) => any
-  onShowPassword?: () => void
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {

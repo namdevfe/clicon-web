@@ -16,8 +16,6 @@ import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 
 const SignUpForm = () => {
-  const [isShowPassword, setIsShowPassword] = useState<boolean>(false)
-  const [isShowConfirmPassword, setIsShowConfirmPassword] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
 
@@ -32,14 +30,6 @@ const SignUpForm = () => {
     },
     resolver: zodResolver(registerSchema)
   })
-
-  const hanldeToggleShowPassword = () => {
-    setIsShowPassword((prev) => !prev)
-  }
-
-  const hanldeToggleShowConfirmPassword = () => {
-    setIsShowConfirmPassword((prev) => !prev)
-  }
 
   const handleRegisterSubmit = async (value: RegisterPayload) => {
     setIsLoading(true)
@@ -73,25 +63,15 @@ const SignUpForm = () => {
           name='password'
           control={control}
           isPassword
-          type={isShowPassword ? 'text' : 'password'}
           label='Password'
           extraActions={
             <Link href='/forgot-password' className='text-body-small-500 text-secondary-500' tabIndex={-1}>
               Forgot password
             </Link>
           }
-          onShowPassword={hanldeToggleShowPassword}
         />
 
-        <Input
-          disabled={isLoading}
-          name='confirmPassword'
-          control={control}
-          isPassword
-          type={isShowConfirmPassword ? 'text' : 'password'}
-          label='Confirm password'
-          onShowPassword={hanldeToggleShowConfirmPassword}
-        />
+        <Input disabled={isLoading} name='confirmPassword' control={control} isPassword label='Confirm password' />
 
         <Input
           name='isAgree'

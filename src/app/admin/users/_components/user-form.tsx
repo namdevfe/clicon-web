@@ -1,5 +1,6 @@
 'use client'
 
+import { addUser } from '@/app/admin/users/actions'
 import Button from '@/components/button'
 import Input from '@/components/input'
 import Select, { SelectOption } from '@/components/select'
@@ -7,16 +8,17 @@ import UploadImage from '@/components/upload-image'
 import { uploadFile } from '@/lib/upload'
 import { addUserSchema } from '@/schemas/user-schema'
 import roleService from '@/services/role-service'
-import userService from '@/services/user-service'
 import { Role } from '@/types/role'
 import { AddUserPayload } from '@/types/user'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { StatusCodes } from 'http-status-codes'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 const UserForm = () => {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isRolesFetching, setIsRolesFetching] = useState<boolean>(true)
   const [roles, setRoles] = useState<Role[]>([])
@@ -45,21 +47,23 @@ const UserForm = () => {
     const payload = { ...values }
 
     setIsLoading(true)
-    // Handle upload avatar
+
+    // Upload avatar to cloudinary
     if (values?.avatar && values.avatar instanceof File) {
       payload.avatar = await uploadFile(values.avatar)
     }
 
-    handleAddUser(payload)
+    await handleAddUser(payload)
   }
 
   const handleAddUser = async (payload: AddUserPayload) => {
     try {
-      const response = await userService.addUser(payload)
+      const response = await addUser(payload)
       if (response?.statusCode === StatusCodes.OK && response?.message) {
         setValue('role', '')
         reset()
         toast.success(response.message ?? 'Add new user is successfully.')
+        router.push('/admin/users')
       }
     } catch (error: any) {
       toast.error(error?.message || 'Something went wrongs!')

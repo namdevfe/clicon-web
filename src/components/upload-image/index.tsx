@@ -1,6 +1,7 @@
 'use client'
 
 import Avatar from '@/components/avatar'
+import { cn } from '@/lib/cn'
 import { Camera } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 import { Control, useController } from 'react-hook-form'
@@ -38,7 +39,7 @@ const UploadImage = ({ name, control, ...restProps }: UploadImageProps) => {
       !!previewImage && URL.revokeObjectURL(previewImage)
       field.onChange(undefined)
     }
-  }, [isSubmitSuccessful])
+  }, [isSubmitSuccessful, field, previewImage])
 
   return (
     <label className='relative flex w-24 h-24 rounded-full overflow-hidden cursor-pointer'>
@@ -48,7 +49,7 @@ const UploadImage = ({ name, control, ...restProps }: UploadImageProps) => {
         imageURL={previewImage || ''}
         alt='User Avatar'
         size={50}
-        className='bg-gray-100 w-full h-full object-cover'
+        className={cn('bg-gray-100 w-full h-full object-cover')}
       />
       <div className='absolute left-0 top-0 w-full h-full flex items-center justify-center text-white bg-black opacity-0 transition-opacity duration-300 hover:opacity-80'>
         <Camera size={32} />

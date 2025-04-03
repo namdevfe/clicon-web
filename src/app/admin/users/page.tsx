@@ -18,7 +18,7 @@ const getUsers = async (accessToken: string) => {
       const response = await userService.getUsers(accessToken)
       return response
     } catch (error) {
-      console.log('🚀error---->', error)
+      console.log(error)
     }
   }
 }
@@ -45,12 +45,14 @@ const renderRow = (item: User) => {
       <td className='py-3 px-6'>
         <div className='flex items-center gap-[10px]'>
           <Avatar
-            className='flex-shrink-0 bg-gray-200 text-white p-2'
-            size={item?.avatar ? 36 : 28}
+            className={cn('flex-shrink-0 text-white p-2 border border-gray-600', {
+              'bg-gray-200': !item.avatar
+            })}
+            size={28}
             imageURL={item?.avatar}
             alt='Avatar'
-            width={36}
-            height={36}
+            width={28}
+            height={28}
           />
           <div>
             <p className='text-body-small-600'>{`${item.firstName} ${item.lastName}`}</p>
