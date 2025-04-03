@@ -30,7 +30,7 @@ const SidebarItem = ({ data, className = '' }: SidebarItemProps) => {
       <Link
         href={href || ''}
         className={cn(
-          'flex items-center justify-between text-body-small-400 text-gray-600 py-[10px] px-6 transition-colors duration-300 hover:text-gray-900 hover:bg-gray-50',
+          'flex items-center justify-center sm:justify-between text-body-small-400 text-gray-600 py-[10px] px-6 transition-colors duration-300 hover:text-gray-900 hover:bg-gray-50',
           {
             'bg-primary-500 text-white hover:text-white hover:bg-primary-500': isActive || (!!href && href === pathname)
           },
@@ -45,7 +45,7 @@ const SidebarItem = ({ data, className = '' }: SidebarItemProps) => {
       >
         <div className='flex items-center gap-3'>
           {icon && <span>{icon}</span>}
-          <span>{title}</span>
+          <span className='hidden sm:block'>{title}</span>
         </div>
         {isParent && (
           <CaretRight

@@ -34,7 +34,7 @@ const AdminHeader = () => {
   const dispatch = useAppDispatch()
   const profile = useAppSelector(selectProfile)
   const router = useRouter()
-  const token = isClient ? (tokenMethod.get() as Login) : null
+  const token: Login = isClient ? tokenMethod.get() : null
 
   const handleLogout = async () => {
     const payload: LogoutPayload = { _id: profile?._id as string, refreshToken: token?.refreshToken as string }
@@ -68,7 +68,7 @@ const AdminHeader = () => {
   }
 
   return (
-    <header className='h-16 shadow-md fixed top-0 l-[var(--w-sidebar)] w-[calc(100%-var(--w-sidebar))]'>
+    <header className='h-16 shadow-md fixed top-0 z-[100] bg-white l-[var(--w-sidebar)] w-[calc(100%-var(--w-sidebar))]'>
       <Container className='h-full flex items-center justify-between'>
         <div>Search</div>
         <div className='flex items-center gap-4'>
@@ -82,7 +82,7 @@ const AdminHeader = () => {
                 <Avatar imageURL='/images/avatar-img.jpg' alt='Avatar' width={36} height={36} priority />
               </button>
             </Dropdown.Trigger>
-            <Dropdown.Content>
+            <Dropdown.Content className='fixed'>
               <Menu items={ACCOUNT_MENU_ITEMS} onChange={handleMenuChange} />
             </Dropdown.Content>
           </Dropdown>
