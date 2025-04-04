@@ -36,12 +36,14 @@ const Select = ({
     fieldState: { error },
     formState: { isSubmitSuccessful }
   } = useController({ name, control })
+
   const [isShowList, setIsShowList] = useState<boolean>(false)
   const selectTriggerRef = useRef<HTMLDivElement | null>(null)
   const { coord, setCoord } = useRectResize(selectTriggerRef)
   const [selectedOption, setSelectedOption] = useState<SelectOption | undefined>(() => {
     return !!defaultValue ? options.find((option) => option.value === defaultValue) : undefined
   })
+  const optionDefault = options.find((option) => option.value === field.value)
 
   const handleToggleSelect = () => {
     setIsShowList((prev) => !prev)
@@ -64,7 +66,11 @@ const Select = ({
       setSelectedOption(undefined)
       field.onChange('')
     }
-  }, [isSubmitSuccessful])
+  }, [isSubmitSuccessful, field])
+
+  useEffect(() => {
+    optionDefault && setSelectedOption(optionDefault)
+  }, [optionDefault])
 
   return (
     <Dropdown
