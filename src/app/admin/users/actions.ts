@@ -29,3 +29,14 @@ export const editUser = async (id: string, data: EditUserPayload) => {
     return response
   }
 }
+
+export const deleteUser = async (id: string) => {
+  const token = cookies().get(STORAGE.AUTH) ? (JSON.parse(cookies().get(STORAGE.AUTH)?.value || '') as Login) : null
+  const accessToken = token?.accessToken || ''
+
+  if (accessToken && id) {
+    const response = await userService.deleteUser(id, accessToken)
+    revalidatePath('/admin/users')
+    return response
+  }
+}
