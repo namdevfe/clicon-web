@@ -16,6 +16,7 @@ const UploadImage = ({ name, control, ...restProps }: UploadImageProps) => {
     field,
     formState: { isSubmitSuccessful }
   } = useController({ name, control })
+
   const [previewImage, setPreviewImage] = useState<string>('')
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,12 +42,20 @@ const UploadImage = ({ name, control, ...restProps }: UploadImageProps) => {
     }
   }, [isSubmitSuccessful, field, previewImage])
 
+  useEffect(() => {
+    if (field.value instanceof File) {
+      setPreviewImage(URL.createObjectURL(field.value))
+    } else {
+      setPreviewImage(field.value)
+    }
+  }, [field])
+
   return (
     <label className='relative flex w-24 h-24 rounded-full overflow-hidden cursor-pointer'>
       <input type='file' {...field} {...restProps} hidden onChange={handleImageChange} value='' />
       {/* Customize avatar upload */}
       <Avatar
-        imageURL={previewImage || ''}
+        imageURL={previewImage}
         alt='User Avatar'
         size={50}
         className={cn('bg-gray-100 w-full h-full object-cover')}

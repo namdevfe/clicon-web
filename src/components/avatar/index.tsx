@@ -28,6 +28,7 @@ const Avatar = ({ imageURL, alt, size, width = 50, height = 50, className = '', 
           width={width}
           height={height}
           className='w-full h-full object-cover'
+          priority
           {...restProps}
         />
       ) : (

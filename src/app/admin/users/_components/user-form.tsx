@@ -1,15 +1,15 @@
 'use client'
 
-import { addUser } from '@/app/admin/users/actions'
+import { addUser, editUser } from '@/app/admin/users/actions'
 import Button from '@/components/button'
 import Input from '@/components/input'
 import Select, { SelectOption } from '@/components/select'
 import UploadImage from '@/components/upload-image'
 import { uploadFile } from '@/lib/upload'
-import { addUserSchema } from '@/schemas/user-schema'
+import { addUserSchema, editUserSchema } from '@/schemas/user-schema'
 import roleService from '@/services/role-service'
 import { Role } from '@/types/role'
-import { AddUserPayload } from '@/types/user'
+import { AddUserPayload, EditUserPayload, User } from '@/types/user'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { StatusCodes } from 'http-status-codes'
 import { useRouter } from 'next/navigation'
@@ -17,12 +17,16 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-const UserForm = () => {
+interface UserFormProps {
+  user?: User
+}
+
+const UserForm = ({ user }: UserFormProps) => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isRolesFetching, setIsRolesFetching] = useState<boolean>(true)
   const [roles, setRoles] = useState<Role[]>([])
-  const { control, handleSubmit, reset, setValue } = useForm<AddUserPayload>({
+  const { control, handleSubmit, reset, setValue } = useForm<AddUserPayload | EditUserPayload>({
     defaultValues: {
       avatar: undefined,
       email: '',
@@ -31,7 +35,7 @@ const UserForm = () => {
       lastName: '',
       role: ''
     },
-    resolver: zodResolver(addUserSchema)
+    resolver: zodResolver(!!user ? editUserSchema : addUserSchema)
   })
   const roleOptions: SelectOption[] = [
     {
@@ -53,7 +57,23 @@ const UserForm = () => {
       payload.avatar = await uploadFile(values.avatar)
     }
 
-    await handleAddUser(payload)
+    !!user ? await handleEditUser(user._id, payload) : await handleAddUser(payload)
+  }
+
+  const handleEditUser = async (id: string, payload: EditUserPayload) => {
+    try {
+      const response = await editUser(id, payload)
+      if (!!response?.data) {
+        setValue('role', '')
+        reset()
+        toast.success(response.message)
+        router.push('/admin/users')
+      }
+    } catch (error: any) {
+      toast.error(error.message || 'Something went wrongs!')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleAddUser = async (payload: AddUserPayload) => {
@@ -88,6 +108,19 @@ const UserForm = () => {
     })()
   }, [])
 
+  useEffect(() => {
+    if (user) {
+      const { email, firstName, lastName, role, avatar } = user || {}
+      reset({
+        email,
+        avatar,
+        firstName,
+        lastName,
+        role: role as string
+      })
+    }
+  }, [user, reset])
+
   return (
     <form onSubmit={handleSubmit(handleUserFormSubmit)}>
       <Input
@@ -99,7 +132,7 @@ const UserForm = () => {
           return <UploadImage {...props} />
         }}
       />
-      <Input disabled={isLoading} label='Email' name='email' control={control} />
+      <Input disabled={isLoading || !!user} label='Email' name='email' control={control} />
       <Input disabled={isLoading} label='Password' name='password' control={control} isPassword />
       <Input disabled={isLoading} label='First name' name='firstName' control={control} />
       <Input disabled={isLoading} label='Last name' name='lastName' control={control} />
