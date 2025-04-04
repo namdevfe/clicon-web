@@ -80,7 +80,9 @@ const renderRow = (item: User) => {
             </Link>
           </Button>
           <Button variant='danger' className='min-w-8 w-7 h-8 p-0 rounded-full'>
-            <Trash size={18} />
+            <Link href={`/admin/users/delete/${item._id}`}>
+              <Trash size={18} />
+            </Link>
           </Button>
         </div>
       </td>

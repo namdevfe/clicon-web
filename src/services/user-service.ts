@@ -30,6 +30,13 @@ const userService = {
         Authorization: `Bearer ${accessToken}`
       }
     })
+  },
+  deleteUser(id: string, accessToken?: string) {
+    return http.delete<ApiResponse<User>>(`/users/delete-user/${id}`, null, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
   }
 }
 
