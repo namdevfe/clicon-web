@@ -10,7 +10,8 @@ export const buttonVariants = cva(
       variant: {
         primary: 'bg-primary-500 text-white hover:bg-primary-600',
         warning: 'bg-warning-500 text-gray-900 hover:bg-warning-400',
-        danger: 'bg-danger-500 text-white hover:bg-danger-600'
+        danger: 'bg-danger-500 text-white hover:bg-danger-600',
+        gray: 'bg-gray-900 text-white hover:bg-gray-700'
       },
       size: {
         large: 'min-w-[117px] h-[56px] px-8 rounded-[3px] gap-3',
@@ -21,11 +22,14 @@ export const buttonVariants = cva(
         'primary-dark':
           'bg-white border-2 border-primary-500 text-primary-500 hover:bg-primary-50 hover:text-primary-600 hover:border-primary-600',
         'primary-light':
-          'bg-white border-2 border-primary-100 text-primary-500 hover:bg-white hover:text-primary-500 hover:border-primary-500'
+          'bg-white border-2 border-primary-100 text-primary-500 hover:bg-white hover:text-primary-500 hover:border-primary-500',
+        'gray-dark':
+          'bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-50 hover:border-gray-700 hover:text-gray-700',
+        'gray-light': 'bg-white border-2 border-gray-100 text-gray-900 hover:border-gray-900 hover:bg-white'
       },
       disabled: {
         false: null,
-        true: 'cursor-not-allowed pointer-events-none'
+        true: 'disabled:cursor-not-allowed disabled:pointer-events-none'
       }
     },
     defaultVariants: {

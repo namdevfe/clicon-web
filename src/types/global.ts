@@ -12,3 +12,17 @@ export interface Base {
   _destroy: boolean
   __v: number
 }
+
+export interface Pagination {
+  total: number
+  currentPage: number
+  limit: number
+  totalPages: number
+}
+
+export interface QueryParams {
+  page: number
+  limit: number
+  sort?: 'asc' | 'desc'
+  sortBy?: string
+}
