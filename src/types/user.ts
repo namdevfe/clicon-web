@@ -1,5 +1,5 @@
 import { addUserSchema, editUserSchema } from '@/schemas/user-schema'
-import { Base } from '@/types/global'
+import { Base, Pagination } from '@/types/global'
 import { z } from 'zod'
 
 export interface User extends Base {
@@ -17,3 +17,8 @@ export interface User extends Base {
 export type AddUserPayload = z.infer<typeof addUserSchema>
 
 export type EditUserPayload = z.infer<typeof editUserSchema>
+
+export interface UserList {
+  users: User[]
+  pagination: Pagination
+}

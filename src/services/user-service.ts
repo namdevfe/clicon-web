@@ -1,6 +1,7 @@
+import { USER_LIMITS } from '@/constants/pagination'
 import http from '@/lib/http'
-import { ApiResponse } from '@/types/global'
-import { AddUserPayload, EditUserPayload, User } from '@/types/user'
+import { ApiResponse, QueryParams } from '@/types/global'
+import { AddUserPayload, EditUserPayload, User, UserList } from '@/types/user'
 
 const userService = {
   getUsers(accessToken?: string) {
@@ -9,6 +10,16 @@ const userService = {
         Authorization: `Bearer ${accessToken}`
       }
     })
+  },
+  getUserWithPagination(query?: QueryParams, accessToken?: string) {
+    return http.get<ApiResponse<UserList>>(
+      `/users/get-users?page=${query?.page}&limit=${query?.limit || USER_LIMITS}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    )
   },
   getUserDetails(id: string, accessToken?: string) {
     return http.get<ApiResponse<User>>(`/users/get-user-details/${id}`, {

@@ -2,20 +2,23 @@ import UsersPageBreadcrumb from '@/app/admin/users/_components/users-page-breadc
 import Avatar from '@/components/avatar'
 import Button from '@/components/button'
 import Container from '@/components/container'
+import Pagination from '@/components/pagination'
 import Table, { Column } from '@/components/table'
+import { USER_LIMITS } from '@/constants/pagination'
 import { STORAGE } from '@/constants/storage'
 import { cn } from '@/lib/cn'
 import userService from '@/services/user-service'
 import { Login } from '@/types/auth'
+import { QueryParams } from '@/types/global'
 import { User } from '@/types/user'
 import { PencilSimpleLine, Plus, Trash } from '@phosphor-icons/react/dist/ssr'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 
-const getUsers = async (accessToken: string) => {
+const getUsers = async (accessToken: string, query?: QueryParams) => {
   if (accessToken) {
     try {
-      const response = await userService.getUsers(accessToken)
+      const response = await userService.getUserWithPagination(query, accessToken)
       return response
     } catch (error) {
       console.log(error)
@@ -90,11 +93,23 @@ const renderRow = (item: User) => {
   )
 }
 
-const UsersPage = async () => {
+interface UsersPageProps {
+  searchParams?: {
+    [key: string]: string | string[] | undefined
+  }
+}
+
+const UsersPage = async ({ searchParams }: UsersPageProps) => {
+  const queryParams = {
+    page: Number(searchParams?.page) || 1,
+    limit: Number(searchParams?.limit) || +USER_LIMITS
+  }
   const cookieStore = cookies()
   const token = JSON.parse(cookieStore.get(STORAGE.AUTH)?.value as string) as Login
-  const response = await getUsers(token?.accessToken)
-  const users = response?.data || []
+  const response = await getUsers(token?.accessToken, queryParams)
+  const users = response?.data?.users || []
+  const pagination = response?.data?.pagination
+  const { currentPage, limit, total, totalPages } = pagination || {}
 
   return (
     <>
@@ -109,7 +124,15 @@ const UsersPage = async () => {
             </Link>
           </Button>
         </div>
-        <Table columns={USER_COLUMNS} data={users} renderRow={renderRow} />
+        <Table columns={USER_COLUMNS} data={users || []} renderRow={renderRow} />
+        <Pagination
+          route='/admin/users'
+          className='mt-10 justify-center'
+          currentPage={currentPage || 1}
+          limit={limit}
+          total={total}
+          totalPages={totalPages}
+        />
       </Container>
     </>
   )
