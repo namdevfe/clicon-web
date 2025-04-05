@@ -1,4 +1,5 @@
 import ButtonDeleteUser from '@/app/admin/users/_components/button-delete-user'
+import RoleBadge from '@/app/admin/users/_components/role-badge'
 import UsersPageBreadcrumb from '@/app/admin/users/_components/users-page-breadcrumb'
 import Avatar from '@/components/avatar'
 import Button from '@/components/button'
@@ -33,6 +34,11 @@ const USER_COLUMNS: Column[] = [
     title: 'Name'
   },
   {
+    id: 'role',
+    title: 'Role',
+    className: 'hidden xs:table-cell'
+  },
+  {
     id: 'status',
     title: 'Status',
     className: 'hidden xs:table-cell'
@@ -65,6 +71,9 @@ const renderRow = (item: User) => {
             </Link>
           </div>
         </div>
+      </td>
+      <td className='py-3 px-6 hidden xs:table-cell'>
+        <RoleBadge id={item.role as string} />
       </td>
       <td className='py-3 px-6 hidden xs:table-cell'>
         <div
