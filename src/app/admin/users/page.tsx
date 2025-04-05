@@ -20,7 +20,7 @@ import Link from 'next/link'
 const getUsers = async (accessToken: string, query?: QueryParams) => {
   if (accessToken) {
     try {
-      const response = await userService.getUserWithPagination(query, accessToken)
+      const response = await userService.getUsersWithPagination(query, accessToken)
       return response
     } catch (error) {
       console.log(error)

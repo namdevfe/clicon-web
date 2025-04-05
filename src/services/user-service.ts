@@ -11,7 +11,7 @@ const userService = {
       }
     })
   },
-  getUserWithPagination(query?: QueryParams, accessToken?: string) {
+  getUsersWithPagination(query?: QueryParams, accessToken?: string) {
     return http.get<ApiResponse<UserList>>(
       `/users/get-users?page=${query?.page}&limit=${query?.limit || USER_LIMITS}`,
       {
