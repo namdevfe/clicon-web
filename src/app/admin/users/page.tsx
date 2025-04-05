@@ -1,3 +1,4 @@
+import ButtonDeleteUser from '@/app/admin/users/_components/button-delete-user'
 import UsersPageBreadcrumb from '@/app/admin/users/_components/users-page-breadcrumb'
 import Avatar from '@/components/avatar'
 import Button from '@/components/button'
@@ -11,7 +12,7 @@ import userService from '@/services/user-service'
 import { Login } from '@/types/auth'
 import { QueryParams } from '@/types/global'
 import { User } from '@/types/user'
-import { PencilSimpleLine, Plus, Trash } from '@phosphor-icons/react/dist/ssr'
+import { PencilSimpleLine, Plus } from '@phosphor-icons/react/dist/ssr'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 
@@ -82,11 +83,7 @@ const renderRow = (item: User) => {
               <PencilSimpleLine size={18} />
             </Link>
           </Button>
-          <Button variant='danger' className='min-w-8 w-7 h-8 p-0 rounded-full'>
-            <Link href={`/admin/users/delete/${item._id}`}>
-              <Trash size={18} />
-            </Link>
-          </Button>
+          <ButtonDeleteUser user={item} />
         </div>
       </td>
     </tr>
