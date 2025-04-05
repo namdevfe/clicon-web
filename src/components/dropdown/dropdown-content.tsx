@@ -25,7 +25,7 @@ const DropdownContent = ({ children, className = '', styles }: DropdownContentPr
           ...styles
         }}
         className={cn(
-          'absolute top-full z-[10] min-w-[180px] w-full bg-white rounded-[3px] shadow-md',
+          'absolute top-full z-[10] min-w-[180px] bg-white rounded-[3px] shadow-md',
           {
             '-translate-x-full': position === 'right'
           },

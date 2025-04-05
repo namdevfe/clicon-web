@@ -1,4 +1,5 @@
 'use client'
+
 import Header from '@/components/header'
 import NavbarMobile from '@/components/navbar/navbar-mobile'
 import { cn } from '@/lib/cn'
