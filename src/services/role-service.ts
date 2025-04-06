@@ -45,10 +45,23 @@ const roleService = {
         : {}
     )
   },
-  eidtRole(payload: AddRolePayload, { id, accessToken }: { id: string; accessToken: string }) {
+  editRole(payload: AddRolePayload, { id, accessToken }: { id: string; accessToken: string }) {
     return http.put<ApiResponse<Role>>(
       `/roles/edit-role/${id}`,
       payload,
+      accessToken
+        ? {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          }
+        : {}
+    )
+  },
+  deleteRole(id: string, accessToken?: string) {
+    return http.delete<ApiResponse<Role>>(
+      `/roles/delete-role/${id}`,
+      null,
       accessToken
         ? {
             headers: {

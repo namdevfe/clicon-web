@@ -1,3 +1,4 @@
+import ButtonDeleteRole from '@/app/admin/roles/_components/button-delete-role'
 import Breadcrumb from '@/components/breadcrumb'
 import Button from '@/components/button'
 import Container from '@/components/container'
@@ -56,6 +57,7 @@ const renderRow = (item: Role) => {
               <PencilSimpleLine size={18} />
             </Link>
           </Button>
+          <ButtonDeleteRole role={item} />
         </div>
       </td>
     </tr>

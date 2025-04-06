@@ -23,7 +23,18 @@ export const editRole = async (id: string, payload: AddRolePayload) => {
   const accessToken = token.accessToken
 
   if (!!accessToken) {
-    const response = await roleService.eidtRole(payload, { id, accessToken })
+    const response = await roleService.editRole(payload, { id, accessToken })
+    revalidatePath('/admin/roles')
+    return response
+  }
+}
+
+export const deleteRole = async (id: string) => {
+  const token = cookies().get(STORAGE.AUTH) ? (JSON.parse(cookies().get(STORAGE.AUTH)?.value || '') as Login) : null
+  const accessToken = token?.accessToken || ''
+
+  if (accessToken && id) {
+    const response = await roleService.deleteRole(id, accessToken)
     revalidatePath('/admin/roles')
     return response
   }
