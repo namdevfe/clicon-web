@@ -66,6 +66,19 @@ const permissionService = {
           }
         : {}
     )
+  },
+  deletePermission(id: string, accessToken?: string) {
+    return http.delete<ApiResponse<Permission>>(
+      `/permissions/delete-permission/${id}`,
+      {},
+      accessToken
+        ? {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          }
+        : {}
+    )
   }
 }
 

@@ -1,3 +1,4 @@
+import ButtonDeletePermission from '@/app/admin/permissions/_components/button-delete-permission'
 import Breadcrumb from '@/components/breadcrumb'
 import Button from '@/components/button'
 import Container from '@/components/container'
@@ -56,7 +57,7 @@ const renderRow = (item: Permission) => {
               <PencilSimpleLine size={18} />
             </Link>
           </Button>
-          {/* <ButtonDeleteRole role={item} /> */}
+          <ButtonDeletePermission permission={item} />
         </div>
       </td>
     </tr>
