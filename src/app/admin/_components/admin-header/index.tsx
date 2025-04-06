@@ -35,7 +35,7 @@ const AdminHeader = () => {
   const handleLogout = async () => {
     try {
       const res: any = await authService.logoutFromNextServer()
-      if (res?.status === StatusCodes.OK) {
+      if (res?.statusCode === StatusCodes.OK) {
         // Clear token & profile on next client
         tokenMethod.remove()
         localStorage.removeItem(STORAGE.PROFILE)

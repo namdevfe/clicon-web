@@ -5,13 +5,7 @@ import { NextRequest } from 'next/server'
 
 const AUTH_PATHS = ['/auth', '/auth/email-verification']
 const CUSTOMER_PATHS = ['/profile']
-const ADMIN_PATHS = [
-  '/admin',
-  '/admin/dashboard',
-  '/admin/users',
-  '/admin/settings/roles',
-  '/admin/settings/permissions'
-]
+const ADMIN_PATHS = ['/admin', '/admin/dashboard', '/admin/users', '/admin/roles', '/admin/permissions']
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {

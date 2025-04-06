@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { Bounce, ToastContainer } from 'react-toastify'
 import '@/styles/globals.scss'
+import { RefreshToken } from '@/components/auth'
 
 const publicSans = localFont({
   src: [
@@ -42,6 +43,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={publicSans.className} suppressHydrationWarning>
+        <RefreshToken />
         <StoreProvider>
           <ToastContainer
             position='bottom-right'
