@@ -1,24 +1,25 @@
 'use client'
 
-import { addRole } from '@/app/admin/roles/actions'
+import { addRole, editRole } from '@/app/admin/roles/actions'
 import Button from '@/components/button'
 import Card from '@/components/card'
 import Checkbox from '@/components/checkbox'
 import Input from '@/components/input'
 import { addRoleSchema } from '@/schemas/role-schema'
 import { Permission } from '@/types/permission'
-import { AddRolePayload } from '@/types/role'
+import { AddRolePayload, Role } from '@/types/role'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 interface RoleFormProps {
   permissions: Permission[]
+  role?: Role
 }
 
-const RoleForm = ({ permissions = [] }: RoleFormProps) => {
+const RoleForm = ({ permissions = [], role }: RoleFormProps) => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([])
@@ -58,6 +59,21 @@ const RoleForm = ({ permissions = [] }: RoleFormProps) => {
     }
   }
 
+  const handleEditRole = async (payload: AddRolePayload) => {
+    setIsLoading(true)
+    try {
+      const response = await editRole(role?._id as string, payload)
+      if (!!response?.data) {
+        toast.success(response.message)
+        router.push('/admin/roles')
+      }
+    } catch (error: any) {
+      toast.error(error?.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const handleRoleFormSubmit = async (values: AddRolePayload) => {
     const payload = { ...values }
 
@@ -65,8 +81,21 @@ const RoleForm = ({ permissions = [] }: RoleFormProps) => {
       payload.permissions = selectedPermissions
     }
 
-    await handleAddRole(payload)
+    !!role ? await handleEditRole(payload) : await handleAddRole(payload)
   }
+
+  // Editting mode
+  useEffect(() => {
+    if (!!role) {
+      reset({
+        name: role.name || '',
+        description: role.description || ''
+        // permissions: role.permissions || []
+      })
+
+      setSelectedPermissions(role.permissions || [])
+    }
+  }, [role, reset])
 
   return (
     <form onSubmit={handleSubmit(handleRoleFormSubmit)}>

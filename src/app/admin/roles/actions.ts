@@ -17,3 +17,14 @@ export const addRole = async (payload: AddRolePayload) => {
     return response
   }
 }
+
+export const editRole = async (id: string, payload: AddRolePayload) => {
+  const token = JSON.parse(cookies().get(STORAGE.AUTH)?.value || '') as Login
+  const accessToken = token.accessToken
+
+  if (!!accessToken) {
+    const response = await roleService.eidtRole(payload, { id, accessToken })
+    revalidatePath('/admin/roles')
+    return response
+  }
+}
