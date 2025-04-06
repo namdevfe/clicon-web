@@ -28,3 +28,7 @@ export type ProfileResponse = User & {
     name: string
   }
 }
+
+export type RefreshTokenPayload = {
+  refreshToken: string
+}

@@ -6,6 +6,7 @@ import {
   LoginPayload,
   LogoutPayload,
   ProfileResponse,
+  RefreshTokenPayload,
   RegisterPayload
 } from '@/types/auth'
 import { ApiResponse } from '@/types/global'
@@ -46,6 +47,9 @@ const authService = {
         baseURL: ''
       }
     )
+  },
+  refreshToken(payload: RefreshTokenPayload) {
+    return http.put<ApiResponse<Login>>('/auth/refresh-token', payload)
   }
 }
 
