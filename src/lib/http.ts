@@ -1,5 +1,6 @@
 import apiRoot from '@/constants/api'
 import tokenMethod from '@/lib/storage'
+import { StatusCodes } from 'http-status-codes'
 
 type CustomRequestInit = Omit<RequestInit, 'method'> & {
   baseURL?: string
@@ -42,7 +43,11 @@ const request = async <Response>(method: Method, url: string, options?: CustomRe
     const result = (await res.json()) as Response
 
     if (!res.ok) {
-      throw result
+      if (res.status === StatusCodes.UNAUTHORIZED || res.status === StatusCodes.FORBIDDEN) {
+        // Handle refresh token
+      } else {
+        throw result
+      }
     }
 
     if (res.status >= 200 && res.status < 300) {
