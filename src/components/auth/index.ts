@@ -1,4 +1,5 @@
 export { default as SignUpForm } from './signup-form'
 export { default as SignInForm } from './signin-form'
 export { default as EmailVerificationForm } from './email-verification-form'
+export { default as RefreshToken } from './refresh-token'
 export * from './button-social'

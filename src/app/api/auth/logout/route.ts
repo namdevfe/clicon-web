@@ -17,9 +17,11 @@ export const PUT = async () => {
 
   const payload: LogoutPayload = { _id: profile._id, refreshToken: token.refreshToken }
   const response = await authService.logout(payload)
+
   if (response?.statusCode === StatusCodes.OK) {
     cookieStore.delete(STORAGE.AUTH)
     cookieStore.delete(STORAGE.PROFILE)
-    return Response.json({ message: response.message }, { status: response.statusCode })
   }
+
+  return Response.json(response, { status: response?.statusCode })
 }

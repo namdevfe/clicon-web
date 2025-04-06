@@ -32,3 +32,11 @@ export type ProfileResponse = User & {
 export type RefreshTokenPayload = {
   refreshToken: string
 }
+
+export interface JWTPayload {
+  email: string
+  role: string
+  uid: string
+  iat: number
+  exp: number
+}

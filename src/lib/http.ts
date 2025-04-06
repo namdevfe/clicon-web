@@ -1,6 +1,7 @@
 import apiRoot from '@/constants/api'
 import tokenMethod from '@/lib/storage'
 import { StatusCodes } from 'http-status-codes'
+import { redirect } from 'next/navigation'
 
 type CustomRequestInit = Omit<RequestInit, 'method'> & {
   baseURL?: string
@@ -43,8 +44,27 @@ const request = async <Response>(method: Method, url: string, options?: CustomRe
     const result = (await res.json()) as Response
 
     if (!res.ok) {
-      if (res.status === StatusCodes.UNAUTHORIZED || res.status === StatusCodes.FORBIDDEN) {
-        // Handle refresh token
+      if (res.status === StatusCodes.UNAUTHORIZED) {
+        // If token expired, it would auto logout
+        // On client-side
+        if (isClient) {
+          const logoutPromise = await fetch('/api/auth/logout', {
+            method: 'PUT',
+            headers: {
+              ...baseHeaders
+            }
+          })
+
+          const logoutResponse = await logoutPromise.json()
+          if (logoutResponse?.statusCode === StatusCodes.OK) {
+            tokenMethod.remove()
+            window.location.href = '/auth'
+          }
+        } else {
+          // On server-side
+          // Redirect to logout page (on client-side) to call api logout to next server
+          redirect('/auth/logout')
+        }
       } else {
         throw result
       }
