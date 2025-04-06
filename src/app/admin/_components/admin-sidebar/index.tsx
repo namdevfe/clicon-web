@@ -1,6 +1,6 @@
 import Sidebar from '@/components/sidebar'
 import { SidebarItemType } from '@/components/sidebar/sidebar-item'
-import { Stack, UserCircleGear, Users } from '@phosphor-icons/react/dist/ssr'
+import { Key, Stack, UserCircleGear, Users } from '@phosphor-icons/react/dist/ssr'
 import Link from 'next/link'
 
 export const ADMIN_SIDEBAR_MENU_ITEMS: SidebarItemType[] = [
@@ -21,6 +21,12 @@ export const ADMIN_SIDEBAR_MENU_ITEMS: SidebarItemType[] = [
     icon: <UserCircleGear size={20} />,
     title: 'Roles',
     href: '/admin/roles'
+  },
+  {
+    id: 'permissions',
+    icon: <Key size={20} />,
+    title: 'Permissions',
+    href: '/admin/permissions'
   }
 ]
 
