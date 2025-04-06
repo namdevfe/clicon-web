@@ -1,13 +1,13 @@
 'use client'
 
-import { addPermission } from '@/app/admin/permissions/actions'
+import { addPermission, editPermission } from '@/app/admin/permissions/actions'
 import Button from '@/components/button'
 import Input from '@/components/input'
 import { addPermissionSchema } from '@/schemas/permission-schema'
 import { AddPermissionPayload, Permission } from '@/types/permission'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
@@ -42,7 +42,20 @@ const PermissionForm = ({ permission }: PermissionFormProps) => {
     }
   }
   const handleEditPermission = async (payload: AddPermissionPayload) => {
-    console.log('🚀payload edit---->', payload)
+    if (permission?._id) {
+      setIsLoading(true)
+      try {
+        const response = await editPermission(permission._id, payload)
+        if (response?.data?._id) {
+          toast.success(response.message)
+          router.push('/admin/permissions')
+        }
+      } catch (error: any) {
+        toast.error(error?.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
   }
 
   const handlePermissionFormSubmit = async (values: AddPermissionPayload) => {
@@ -50,6 +63,15 @@ const PermissionForm = ({ permission }: PermissionFormProps) => {
 
     !!permission ? await handleEditPermission(payload) : await handleAddPermission(payload)
   }
+
+  useEffect(() => {
+    if (permission) {
+      reset({
+        url: permission.url || '',
+        description: permission.description || ''
+      })
+    }
+  }, [permission, reset])
 
   return (
     <form onSubmit={handleSubmit(handlePermissionFormSubmit)}>
