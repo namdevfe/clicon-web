@@ -53,6 +53,19 @@ const permissionService = {
           }
         : {}
     )
+  },
+  editPermission(payload: AddPermissionPayload, { id, accessToken }: { id: string; accessToken: string }) {
+    return http.put<ApiResponse<Permission>>(
+      `/permissions/edit-permission/${id}`,
+      payload,
+      accessToken
+        ? {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          }
+        : {}
+    )
   }
 }
 
