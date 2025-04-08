@@ -18,7 +18,6 @@ export type EmailVerificationPayload = {
 }
 
 export type LogoutPayload = {
-  _id: string
   refreshToken: string
 }
 
