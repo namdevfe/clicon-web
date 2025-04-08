@@ -28,8 +28,10 @@ const getUserDetails = async (id: string, accessToken: string) => {
 
 const EditUserPage = async ({ params }: { params: { id: string } }) => {
   const cookieStore = cookies()
-  const token = JSON.parse(cookieStore.get(STORAGE.AUTH)?.value as string) as Login
-  const userData = await getUserDetails(params.id, token.accessToken)
+  const token = cookieStore.get(STORAGE.AUTH)?.value
+    ? (JSON.parse(cookieStore.get(STORAGE.AUTH)?.value || '') as Login)
+    : null
+  const userData = await getUserDetails(params.id, token?.accessToken || '')
 
   return (
     <Container className='py-14'>

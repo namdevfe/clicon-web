@@ -1,6 +1,6 @@
 export type Position = 'left' | 'right'
 
-export interface ApiResponse<T> {
+export interface ApiResponse<T = any> {
   statusCode: number
   message: string
   data?: T
