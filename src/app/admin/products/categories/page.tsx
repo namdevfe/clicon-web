@@ -103,7 +103,7 @@ const ProductCategoriesPage = async ({ searchParams }: ProductCategoriesPageProp
       <div className='flex items-start justify-between my-4'>
         <h1 className='text-heading1'>Categories</h1>
         <Button variant='primary' size='small'>
-          <Link href='/admin/roles/add' className='flex items-center gap-2'>
+          <Link href='/admin/products/categories/add' className='flex items-center gap-2'>
             <Plus size={14} weight='bold' />
             <span>Add new category</span>
           </Link>
