@@ -27,7 +27,7 @@ const RefreshToken = () => {
           await authService.auth(response.data)
         }
       }
-    }, FIVE_MINUTES)
+    }, 60 * 1000)
     return () => clearInterval(intervalId)
   }, [])
 
