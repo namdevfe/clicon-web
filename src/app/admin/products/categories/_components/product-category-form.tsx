@@ -1,18 +1,23 @@
 'use client'
 
-import { addProductCategory } from '@/app/admin/products/categories/actions'
+import { addProductCategory, editProductCategory } from '@/app/admin/products/categories/actions'
 import Button from '@/components/button'
 import Input from '@/components/input'
 import TextArea from '@/components/text-area'
 import { addProductCategorySchema } from '@/schemas/product-category-schema'
-import { AddProductCategoryPayload } from '@/types/product-category'
+import { AddProductCategoryPayload, EditProductCategoryPayload, ProductCategory } from '@/types/product-category'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-const ProductCategoryForm = () => {
+interface ProductCategoryFormProps {
+  slug?: string
+  productCategory?: ProductCategory
+}
+
+const ProductCategoryForm = ({ slug, productCategory }: ProductCategoryFormProps) => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { handleSubmit, control, reset } = useForm<AddProductCategoryPayload>({
@@ -42,10 +47,37 @@ const ProductCategoryForm = () => {
     }
   }
 
+  const handleEditProductCategory = async (payload: EditProductCategoryPayload) => {
+    setIsLoading(true)
+    try {
+      const response = await editProductCategory(slug || '', payload)
+      if (response?.data?._id) {
+        toast.success(response.message)
+        reset({
+          name: '',
+          description: ''
+        })
+        router.push('/admin/products/categories')
+      }
+    } catch (error: any) {
+      toast.error(error?.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const handleProductCategoryFormSubmit = (values: AddProductCategoryPayload) => {
     const payload = { ...values }
-    handleAddProductCategory(payload)
+    !!productCategory ? handleEditProductCategory(payload) : handleAddProductCategory(payload)
   }
+
+  useEffect(() => {
+    if (!Object.keys(productCategory as object).length) return
+    reset({
+      name: productCategory?.name || '',
+      description: productCategory?.description || ''
+    })
+  }, [reset, productCategory])
 
   return (
     <form onSubmit={handleSubmit(handleProductCategoryFormSubmit)}>

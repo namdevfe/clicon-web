@@ -5,6 +5,7 @@ import { z } from 'zod'
 export interface ProductCategory extends Base {
   _id: string
   name: string
+  slug?: string
   description?: string
 }
 

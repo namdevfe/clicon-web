@@ -54,7 +54,7 @@ const renderRow = (item: ProductCategory) => {
       <td className='py-3 px-6'>
         <div className='flex items-center gap-2'>
           <Button variant='warning' className='min-w-8 w-7 h-8 p-0 rounded-full'>
-            <Link href={`/admin/roles/edit/${item._id}`}>
+            <Link href={`/admin/products/categories/edit/${item?.slug}`}>
               <PencilSimpleLine size={18} />
             </Link>
           </Button>
