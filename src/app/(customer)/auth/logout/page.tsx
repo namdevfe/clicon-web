@@ -6,11 +6,13 @@ import { useAppDispatch } from '@/store'
 import { setProfile } from '@/store/reducers/authSlice'
 import { ApiResponse } from '@/types/global'
 import { StatusCodes } from 'http-status-codes'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
 const LogoutPage = () => {
   const dispatch = useAppDispatch()
+  const router = useRouter()
 
   useEffect(() => {
     ;(async () => {
@@ -22,10 +24,12 @@ const LogoutPage = () => {
           toast.success('Logout is successfully.')
         }
       } catch (error: any) {
-        toast.error(error?.message)
+        console.log(error)
+      } finally {
+        router.push('/auth')
       }
     })()
-  }, [])
+  }, [dispatch, router])
 
   return null
 }

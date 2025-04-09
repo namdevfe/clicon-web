@@ -30,3 +30,15 @@ export const editProductCategory = async (slug: string, payload: EditProductCate
     return response
   }
 }
+
+export const softDeleteProductCategory = async (slug: string) => {
+  const cookieStore = cookies()
+  const token = cookieStore.get(STORAGE.AUTH) ? (JSON.parse(cookieStore.get(STORAGE.AUTH)?.value || '') as Login) : null
+  const accessToken = token?.accessToken || ''
+
+  if (slug && accessToken) {
+    const response = await productCategoryService.softDeleteProductCategoryBySlug(slug, accessToken)
+    revalidatePath('/admin/products/categories')
+    return response
+  }
+}

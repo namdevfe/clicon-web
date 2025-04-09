@@ -1,3 +1,4 @@
+import ButtonDeleteProductCategory from '@/app/admin/products/categories/_components/button-delete-product-category'
 import Breadcrumb from '@/components/breadcrumb'
 import Button from '@/components/button'
 import Container from '@/components/container'
@@ -58,6 +59,7 @@ const renderRow = (item: ProductCategory) => {
               <PencilSimpleLine size={18} />
             </Link>
           </Button>
+          <ButtonDeleteProductCategory productCategory={item} />
         </div>
       </td>
     </tr>

@@ -80,6 +80,7 @@ const productCategoryService = {
     const url = `/product-categories/soft-delete-product-category-by-slug/${slug}`
     return http.delete<ApiResponse<ProductCategory>>(
       url,
+      {},
       accessToken
         ? {
             headers: {
@@ -93,6 +94,7 @@ const productCategoryService = {
     const url = `/product-categories/hard-delete-product-category-by-slug/${slug}`
     return http.delete<ApiResponse<ProductCategory>>(
       url,
+      {},
       accessToken
         ? {
             headers: {
