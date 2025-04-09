@@ -25,8 +25,6 @@ const LogoutPage = () => {
         }
       } catch (error: any) {
         console.log(error)
-      } finally {
-        router.push('/auth')
       }
     })()
   }, [dispatch, router])

@@ -37,6 +37,11 @@ export const ADMIN_SIDEBAR_MENU_ITEMS: SidebarItemType[] = [
         id: 'product-categories',
         title: 'Categories',
         href: '/admin/products/categories'
+      },
+      {
+        id: 'brands',
+        title: 'Brands',
+        href: '/admin/products/brands'
       }
     ]
   }
