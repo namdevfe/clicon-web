@@ -1,6 +1,6 @@
 import Sidebar from '@/components/sidebar'
 import { SidebarItemType } from '@/components/sidebar/sidebar-item'
-import { Key, Package, Stack, UserCircleGear, Users } from '@phosphor-icons/react/dist/ssr'
+import { Key, Package, Rows, Stack, Sticker, Tag, UserCircleGear, Users } from '@phosphor-icons/react/dist/ssr'
 import Link from 'next/link'
 
 export const ADMIN_SIDEBAR_MENU_ITEMS: SidebarItemType[] = [
@@ -29,26 +29,28 @@ export const ADMIN_SIDEBAR_MENU_ITEMS: SidebarItemType[] = [
     href: '/admin/permissions'
   },
   {
+    id: 'product-categories',
+    icon: <Rows size={20} />,
+    title: 'Categories',
+    href: '/admin/categories'
+  },
+  {
+    id: 'brands',
+    icon: <Sticker size={20} />,
+    title: 'Brands',
+    href: '/admin/brands'
+  },
+  {
+    id: 'tags',
+    icon: <Tag size={20} />,
+    title: 'Tags',
+    href: '/admin/tags'
+  },
+  {
     id: 'products',
     icon: <Package size={20} />,
     title: 'Products',
-    child: [
-      {
-        id: 'product-categories',
-        title: 'Categories',
-        href: '/admin/products/categories'
-      },
-      {
-        id: 'brands',
-        title: 'Brands',
-        href: '/admin/products/brands'
-      },
-      {
-        id: 'tags',
-        title: 'Tags',
-        href: '/admin/products/tags'
-      }
-    ]
+    href: '/admin/products'
   }
 ]
 

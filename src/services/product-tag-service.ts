@@ -12,18 +12,9 @@ const productTagService = {
     const url = `/product-tags/get-product-tags?page=${query.page}&limit=${query.limit}`
     return http.get<ApiResponse<ProductTagList>>(url)
   },
-  getDetails(slug: string, accessToken?: string) {
+  getDetails(slug: string) {
     const url = `/product-tags/get-product-tag-details-by-slug/${slug}`
-    return http.get<ApiResponse<ProductTag>>(
-      url,
-      accessToken
-        ? {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
-          }
-        : {}
-    )
+    return http.get<ApiResponse<ProductTag>>(url)
   },
   addNew(payload: AddProductTagPayload, accessToken?: string) {
     const url = '/product-tags/add-product-tag'
