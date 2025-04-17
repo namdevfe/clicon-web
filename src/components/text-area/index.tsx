@@ -28,6 +28,7 @@ const TextArea = ({ name, control, disabled = false, ...restProps }: TextAreaPro
       )}
     >
       <textarea
+        id={name}
         className={cn(
           'w-full h-full py-3 pl-4 pr-11 outline-none placeholder:text-gray-500 placeholder:transition-colors placeholder:duration-300 focus-within:placeholder:text-gray-300',
           {

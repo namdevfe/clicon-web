@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/cn'
 import { Checks, Eye, EyeSlash, Warning } from '@phosphor-icons/react'
-import { forwardRef, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { Control, useController } from 'react-hook-form'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -44,6 +44,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const hanldeToggleShowPassword = () => {
     setIsShowPassword((prev) => !prev)
   }
+
+  useEffect(() => {
+    if (inputProps.type === 'number') {
+      field.onChange(Number(field.value))
+    }
+  }, [inputProps.type, field])
 
   return (
     <div className={cn('form-group [&+&]:mt-4', classNameWrapper)}>
