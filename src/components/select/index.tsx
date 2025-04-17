@@ -3,7 +3,7 @@
 import Dropdown from '@/components/dropdown'
 import { useRectResize } from '@/hooks'
 import { cn } from '@/lib/cn'
-import { CaretDown } from '@phosphor-icons/react'
+import { CaretDown, X } from '@phosphor-icons/react'
 import { MouseEvent, useEffect, useRef, useState } from 'react'
 import { Control, useController } from 'react-hook-form'
 
@@ -20,6 +20,7 @@ interface SelectProps {
   placeholder?: string
   defaultValue?: any
   disabled?: boolean
+  mode?: 'multiple' | 'tags'
 }
 
 const Select = ({
@@ -29,7 +30,8 @@ const Select = ({
   defaultValue,
   className = '',
   placeholder = '',
-  disabled = false
+  disabled = false,
+  mode
 }: SelectProps) => {
   const {
     field,
@@ -43,6 +45,7 @@ const Select = ({
   const [selectedOption, setSelectedOption] = useState<SelectOption | undefined>(() => {
     return !!defaultValue ? options.find((option) => option.value === defaultValue) : undefined
   })
+  const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>([])
   const optionDefault = options.find((option) => option.value === field.value)
 
   const handleToggleSelect = () => {
@@ -56,15 +59,31 @@ const Select = ({
 
   const handleSelectChange = (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>, option: SelectOption) => {
     e.stopPropagation()
-    setSelectedOption(option)
-    field.onChange(option.value)
-    handleCloseSelect()
+    if (!mode) {
+      // Select single
+      setSelectedOption(option)
+      field.onChange(option.value)
+      handleCloseSelect()
+    } else {
+      // Select multiple
+      setSelectedOptions((prev) => {
+        if (prev.some((item) => item.value === option.value)) {
+          const newOptions = prev.filter((item) => item.value !== option.value)
+          field.onChange(newOptions.map((item) => item.value))
+          return newOptions
+        }
+        field.onChange([...prev, option].map((item) => item.value))
+        return [...prev, option]
+      })
+    }
   }
 
   useEffect(() => {
     if (isSubmitSuccessful) {
       setSelectedOption(undefined)
       field.onChange('')
+      // setSelectedOptions([])
+      // field.onChange([])
     }
   }, [isSubmitSuccessful, field])
 
@@ -83,32 +102,55 @@ const Select = ({
         <div
           ref={selectTriggerRef}
           className={cn(
-            'flex items-center justify-between py-3 px-4 w-full min-w-60 border border-gray-100 text-body-small-400 text-gray-300 cursor-pointer transition-colors duration-300 hover:text-gray-900',
+            'flex items-center justify-between py-3 px-4 w-full h-11 min-w-60 border border-gray-100 text-body-small-400 text-gray-300 cursor-pointer transition-colors duration-300 hover:text-gray-900',
             {
               'text-gray-900': isShowList && !!selectedOption,
               'border-primary-500': isShowList,
               'border-danger-500 bg-danger-50': !!error?.message,
-              'cursor-not-allowed pointer-events-none opacity-50': disabled
+              'cursor-not-allowed pointer-events-none opacity-50': disabled,
+              relative: !!mode
             }
           )}
         >
-          <span
-            className={cn({
-              'text-gray-700': !!selectedOption
-            })}
-          >
-            {selectedOption?.label || placeholder || 'Select...'}
-          </span>
+          {/* Display tags on mode === 'multiple' */}
+          <div className='absolute top-2/4 left-4 -translate-y-2/4 flex items-center gap-2'>
+            {selectedOptions.map((selectedOption, index) => (
+              <div
+                key={selectedOption.value || new Date().getTime() + index}
+                className='relative flex items-center justify-center w-fit h-8 px-4 rounded overflow-hidden bg-primary-500 text-white'
+              >
+                <span className='pr-3'>{selectedOption.label}</span>
+                <X
+                  className='absolute right-2 top-2/4 -translate-y-2/4'
+                  size={14}
+                  onClick={() =>
+                    setSelectedOptions((prev) => prev.filter((item) => item.value !== selectedOption.value))
+                  }
+                />
+              </div>
+            ))}
+          </div>
+
+          {selectedOptions.length === 0 && (
+            <span
+              className={cn({
+                'text-gray-700': !!selectedOption
+              })}
+            >
+              {selectedOption?.label || placeholder || 'Select...'}
+            </span>
+          )}
           <CaretDown
             size={16}
             className={cn('transition-transform duration-300 will-change-transform', {
-              'rotate-180': isShowList
+              'rotate-180': isShowList,
+              'absolute right-4 top-2/4 -translate-y-2/4': !!mode
             })}
           />
         </div>
       </Dropdown.Trigger>
       <Dropdown.Content
-        className={cn('fixed')}
+        className={cn('fixed max-h-[180px] overflow-y-auto overflow-x-hidden')}
         styles={{
           width: isShowList && coord && coord.width > 0 ? `${coord.width}px` : 0
         }}
@@ -121,7 +163,10 @@ const Select = ({
                 'py-2 px-4 text-gray-600 text-body-small-400 transition-colors duration-300 cursor-pointer hover:text-gray-900 hover:bg-gray-50',
                 {
                   'pointer-events-none cursor-not-allowed text-center': !option.value,
-                  'bg-primary-50 text-primary-500': !!option.value && selectedOption?.value === option.value
+                  'bg-primary-50 text-primary-500':
+                    !!option.value &&
+                    (selectedOption?.value === option.value ||
+                      selectedOptions.some((selectedOption) => selectedOption.value === option.value))
                 }
               )}
               onClick={(e) => option.value && handleSelectChange(e, option)}
