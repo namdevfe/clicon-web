@@ -4,6 +4,7 @@ import { STORAGE } from '@/constants/storage'
 import brandService from '@/services/brand-service'
 import productCategoryService from '@/services/product-category-service'
 import productService from '@/services/product-service'
+import productTagService from '@/services/product-tag-service'
 import { Login } from '@/types/auth'
 import { AddProductPayload } from '@/types/product'
 import { cookies } from 'next/headers'
@@ -15,6 +16,11 @@ export const getAllBrands = async () => {
 
 export const getALlCategories = async () => {
   const response = await productCategoryService.getAllProductCategories()
+  return response
+}
+
+export const getAllTags = async () => {
+  const response = await productTagService.getAll()
   return response
 }
 

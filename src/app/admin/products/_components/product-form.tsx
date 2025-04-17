@@ -1,6 +1,6 @@
 'use client'
 
-import { addProduct, getAllBrands, getALlCategories } from '@/app/admin/products/actions'
+import { addProduct, getAllBrands, getALlCategories, getAllTags } from '@/app/admin/products/actions'
 import Button from '@/components/button'
 import Card from '@/components/card'
 import Input from '@/components/input'
@@ -12,6 +12,7 @@ import { addProductSchema } from '@/schemas/product-schema'
 import { Brand } from '@/types/brand'
 import { AddProductPayload } from '@/types/product'
 import { ProductCategory } from '@/types/product-category'
+import { ProductTag } from '@/types/product-tag'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -23,6 +24,7 @@ const ProductForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [brands, setBrands] = useState<Brand[]>([])
   const [categories, setCategories] = useState<ProductCategory[]>([])
+  const [tags, setTags] = useState<ProductTag[]>([])
   const { handleSubmit, control } = useForm<AddProductPayload>({
     defaultValues: {
       name: '',
@@ -49,6 +51,11 @@ const ProductForm = () => {
   const categoryOptions: SelectOption[] = categories.map((category) => ({
     label: category.name,
     value: category._id
+  }))
+
+  const tagOptions: SelectOption[] = tags.map((tag) => ({
+    label: tag.name,
+    value: tag._id
   }))
 
   const handleProductFormSubmit = async (values: AddProductPayload) => {
@@ -99,6 +106,22 @@ const ProductForm = () => {
         const response = await getALlCategories()
         if (response?.data && response.data.length > 0) {
           setCategories(response.data)
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setIsLoading(false)
+      }
+    })()
+  }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      setIsLoading(true)
+      try {
+        const response = await getAllTags()
+        if (response?.data && response.data.length > 0) {
+          setTags(response.data)
         }
       } catch (error) {
         console.log(error)
@@ -159,6 +182,15 @@ const ProductForm = () => {
           control={control}
           renderProps={(props: any) => {
             return <Select {...props} options={brandOptions || []} />
+          }}
+        />
+        <Input
+          disabled={isLoading}
+          label='Tags'
+          name='tags'
+          control={control}
+          renderProps={(props: any) => {
+            return <Select mode='multiple' {...props} options={tagOptions || []} />
           }}
         />
 
