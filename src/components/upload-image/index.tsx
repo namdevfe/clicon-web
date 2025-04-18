@@ -4,8 +4,8 @@ import Avatar from '@/components/avatar'
 import { cn } from '@/lib/cn'
 import { Camera, Image as ImageIcon } from '@phosphor-icons/react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
-import { Control, useController } from 'react-hook-form'
+import { useEffect, useRef, useState } from 'react'
+import { Control, useController, useFormContext } from 'react-hook-form'
 
 interface UploadImageProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string
@@ -15,12 +15,13 @@ interface UploadImageProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const UploadImage = ({ name, control, imageType = 'avatar', multiple, ...restProps }: UploadImageProps) => {
   const {
-    field,
-    formState: { isSubmitSuccessful }
-  } = useController({ name, control })
-
+    formState: { isSubmitSuccessful },
+    resetField
+  } = useFormContext()
+  const { field } = useController({ name, control })
   const [previewImage, setPreviewImage] = useState<string>('')
   const [previewImages, setPreviewImages] = useState<string[]>([])
+  const isResetRef = useRef<boolean>(false)
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files as FileList
@@ -61,31 +62,38 @@ const UploadImage = ({ name, control, imageType = 'avatar', multiple, ...restPro
 
   // Clear preview single image when form submitted
   useEffect(() => {
-    if (!!previewImage && !multiple && isSubmitSuccessful) {
-      URL.revokeObjectURL(previewImage)
-      field.onChange(undefined)
-      setPreviewImage('')
-    }
-  }, [isSubmitSuccessful, field, previewImage, multiple])
+    if (isSubmitSuccessful && !isResetRef.current) {
+      isResetRef.current = true
+      !!previewImage && URL.revokeObjectURL(previewImage)
 
-  // Clear preview multiple images when form submitted
+      if (previewImages.length > 0) {
+        for (const image of previewImages) {
+          URL.revokeObjectURL(image)
+        }
+      }
+
+      setPreviewImages([])
+      setPreviewImage('')
+      resetField(name)
+    }
+  }, [isSubmitSuccessful, previewImage, previewImages, name, resetField])
+
   // useEffect(() => {
-  //   if (previewImages.length > 0 && multiple && isSubmitSuccessful) {
-  //     for (const image of previewImages) {
-  //       URL.revokeObjectURL(image)
-  //       field.onChange(undefined)
-  //       setPreviewImages([])
+  //   if (getValues(name) instanceof File) {
+  //     const preview = URL.createObjectURL(getValues(name))
+  //     setPreviewImage(preview)
+
+  //     // Cleanup old preview to avoid memory leak
+  //     return () => {
+  //       URL.revokeObjectURL(preview)
   //     }
   //   }
-  // }, [isSubmitSuccessful, field, previewImages, multiple])
-
+  // }, [])
   useEffect(() => {
-    if (field.value instanceof File) {
-      setPreviewImage(URL.createObjectURL(field.value))
-    } else {
-      setPreviewImage(field.value)
+    if (!isSubmitSuccessful) {
+      isResetRef.current = false
     }
-  }, [field])
+  }, [isSubmitSuccessful])
 
   if (imageType === 'avatar')
     return (
@@ -111,12 +119,12 @@ const UploadImage = ({ name, control, imageType = 'avatar', multiple, ...restPro
           <input
             type='file'
             id={name}
-            {...field}
-            {...restProps}
+            name={field.name}
+            ref={field.ref}
             hidden
-            value=''
             onChange={handleImageChange}
             multiple={multiple}
+            {...restProps}
           />
           <ImageIcon size={50} className='text-primary-500' />
           <p className='text-body-medium-600'>Drop your image here, or browse</p>

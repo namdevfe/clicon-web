@@ -14,18 +14,22 @@ import { AddProductPayload } from '@/types/product'
 import { ProductCategory } from '@/types/product-category'
 import { ProductTag } from '@/types/product-tag'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
+import { Plus, Trash } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
+interface ProductAttribute {
+  attributeName: string
+  attributeValue: string
+}
+
 const ProductForm = () => {
-  const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [brands, setBrands] = useState<Brand[]>([])
   const [categories, setCategories] = useState<ProductCategory[]>([])
   const [tags, setTags] = useState<ProductTag[]>([])
-  const { handleSubmit, control } = useForm<AddProductPayload>({
+  const methods = useForm<AddProductPayload>({
     defaultValues: {
       name: '',
       description: '',
@@ -42,6 +46,7 @@ const ProductForm = () => {
     },
     resolver: zodResolver(addProductSchema)
   })
+  const [attributes, setAttributes] = useState<ProductAttribute[]>([])
 
   const brandOptions: SelectOption[] = brands.map((brand) => ({
     label: brand.name,
@@ -58,23 +63,56 @@ const ProductForm = () => {
     value: tag._id
   }))
 
+  // Handle add attribute
+  const handleAddAttributeItem = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setAttributes([...attributes, { attributeName: '', attributeValue: '' }])
+  }
+
+  // Handle attribute item change
+  const handleAttributeChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const { name, value } = e.target
+    const valueChange: any[] = [...attributes]
+    valueChange[index][name] = value
+    setAttributes(valueChange)
+  }
+
+  // Handle remove attribute item
+  const handleRemoveAttributeItem = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, currentIndex: number) => {
+    setAttributes((prev) => prev.filter((_, index) => index !== currentIndex))
+  }
+
   const handleProductFormSubmit = async (values: AddProductPayload) => {
+    const payload = { ...values }
     setIsLoading(true)
-    if (values.imageCover instanceof File) {
-      const image = await uploadFile(values.imageCover)
-      values.imageCover = image
+
+    // If has attributes
+    if (attributes.length > 0) {
+      payload.attributes = attributes.map((attribute) => ({
+        name: attribute.attributeName,
+        value: attribute.attributeValue
+      }))
     }
 
-    if (values.images.length > 0) {
-      const images = await uploadMultipleFiles(values.images)
-      values.images = images
+    // If have image cover
+    if (payload.imageCover instanceof File) {
+      const image = await uploadFile(payload.imageCover)
+      payload.imageCover = image
+    }
+
+    // If has images
+    if (payload.images.length > 0) {
+      const images = await uploadMultipleFiles(payload.images)
+      payload.images = images
     }
 
     try {
-      const response = await addProduct(values)
+      const response = await addProduct(payload)
       if (response?.data) {
         toast.success(response.message)
-        router.push('/admin/products')
+        methods.reset()
+        setAttributes([])
       }
     } catch (error: any) {
       toast.error(error?.message)
@@ -133,73 +171,120 @@ const ProductForm = () => {
 
   return (
     <Card title='Add product' className='mt-4'>
-      <form onSubmit={handleSubmit(handleProductFormSubmit)}>
-        <Input name='name' control={control} label='Name' disabled={isLoading} />
-        <Input
-          disabled={isLoading}
-          name='description'
-          control={control}
-          label='Description'
-          renderProps={(props: any) => {
-            return <TextArea {...props} />
-          }}
-        />
-        <Input
-          disabled={isLoading}
-          name='imageCover'
-          control={control}
-          label='Image Cover'
-          renderProps={(props) => {
-            return <UploadImage {...props} imageType='image' />
-          }}
-        />
-        <Input
-          disabled={isLoading}
-          name='images'
-          control={control}
-          label='Images'
-          renderProps={(props) => {
-            return <UploadImage {...props} imageType='image' multiple={true} />
-          }}
-        />
-        <Input disabled={isLoading} label='Price' name='price' type='number' control={control} />
-        <Input disabled={isLoading} label='Old Price' name='oldPrice' type='number' control={control} />
-        <Input disabled={isLoading} label='Quantity' name='quantity' type='number' control={control} />
-        <Input disabled={isLoading} label='Stock' name='stock' type='number' control={control} />
-        <Input
-          disabled={isLoading}
-          label='Category'
-          name='category'
-          control={control}
-          renderProps={(props: any) => {
-            return <Select {...props} options={categoryOptions || []} />
-          }}
-        />
-        <Input
-          disabled={isLoading}
-          label='Brand'
-          name='brand'
-          control={control}
-          renderProps={(props: any) => {
-            return <Select {...props} options={brandOptions || []} />
-          }}
-        />
-        <Input
-          disabled={isLoading}
-          label='Tags'
-          name='tags'
-          control={control}
-          renderProps={(props: any) => {
-            return <Select mode='multiple' {...props} options={tagOptions || []} />
-          }}
-        />
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(handleProductFormSubmit)}>
+          <Input name='name' control={methods.control} label='Name' disabled={isLoading} />
+          <Input
+            disabled={isLoading}
+            name='description'
+            control={methods.control}
+            label='Description'
+            renderProps={(props: any) => {
+              return <TextArea {...props} />
+            }}
+          />
+          <Input
+            disabled={isLoading}
+            name='imageCover'
+            control={methods.control}
+            label='Image Cover'
+            renderProps={(props) => {
+              return <UploadImage {...props} imageType='image' />
+            }}
+          />
+          <Input
+            disabled={isLoading}
+            name='images'
+            control={methods.control}
+            label='Images'
+            renderProps={(props) => {
+              return <UploadImage {...props} imageType='image' multiple={true} />
+            }}
+          />
+          <Input disabled={isLoading} label='Price' name='price' type='number' control={methods.control} />
+          <Input disabled={isLoading} label='Old Price' name='oldPrice' type='number' control={methods.control} />
+          <Input disabled={isLoading} label='Quantity' name='quantity' type='number' control={methods.control} />
+          <Input disabled={isLoading} label='Stock' name='stock' type='number' control={methods.control} />
+          <Input
+            disabled={isLoading}
+            label='Category'
+            name='category'
+            control={methods.control}
+            renderProps={(props: any) => {
+              return <Select {...props} options={categoryOptions || []} />
+            }}
+          />
+          <Input
+            disabled={isLoading}
+            label='Brand'
+            name='brand'
+            control={methods.control}
+            renderProps={(props: any) => {
+              return <Select {...props} options={brandOptions || []} />
+            }}
+          />
+          <Input
+            disabled={isLoading}
+            label='Tags'
+            name='tags'
+            control={methods.control}
+            renderProps={(props: any) => {
+              return <Select mode='multiple' {...props} options={tagOptions || []} />
+            }}
+          />
 
-        <div className='flex items-center gap-2 mt-6'>
-          <Button type='submit' size='medium' isLoading={isLoading} disabled={isLoading}>
-            Save changes
-          </Button>
-        </div>
-      </form>
+          {/* Attributes */}
+          <div>
+            <div className='flex items-center justify-between'>
+              <h3 className='text-body-xl-600'>Attributes</h3>
+              <Button outlined='primary-dark' size='small' disabled={isLoading} onClick={handleAddAttributeItem}>
+                <Plus size={16} />
+                <span>Add attribute</span>
+              </Button>
+            </div>
+            {attributes.length > 0 &&
+              attributes.map(({ attributeName, attributeValue }, index) => {
+                return (
+                  <div key={`attribute-${index}`} className='flex items-center gap-4 mt-3'>
+                    <Input
+                      disabled={isLoading}
+                      name='attributeName'
+                      control={methods.control}
+                      label='Name'
+                      classNameWrapper='flex-1 [&+&]:mt-0'
+                      value={attributeName}
+                      onChange={(e) => handleAttributeChange(e, index)}
+                    />
+                    <Input
+                      disabled={isLoading}
+                      name='attributeValue'
+                      control={methods.control}
+                      label='Value'
+                      classNameWrapper='flex-1'
+                      value={attributeValue}
+                      onChange={(e) => handleAttributeChange(e, index)}
+                    />
+                    <Button
+                      disabled={isLoading}
+                      isLoading={isLoading}
+                      outlined='primary-light'
+                      className='min-w-fit w-11 h-11 p-0'
+                      onClick={(e) => handleRemoveAttributeItem(e, index)}
+                    >
+                      <Trash size={16} />
+                    </Button>
+                  </div>
+                )
+              })}
+          </div>
+
+          <div className='flex items-center gap-2 mt-6'>
+            <Button type='submit' size='medium' isLoading={isLoading} disabled={isLoading}>
+              Save changes
+            </Button>
+          </div>
+        </form>
+      </FormProvider>
     </Card>
   )
 }

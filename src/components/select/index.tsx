@@ -1,11 +1,9 @@
-'use client'
-
 import Dropdown from '@/components/dropdown'
 import { useRectResize } from '@/hooks'
 import { cn } from '@/lib/cn'
 import { CaretDown, X } from '@phosphor-icons/react'
 import { forwardRef, MouseEvent, useEffect, useRef, useState } from 'react'
-import { Control, useController } from 'react-hook-form'
+import { Control, useController, useFormContext } from 'react-hook-form'
 
 export interface SelectOption {
   value?: string
@@ -31,6 +29,7 @@ const Select = forwardRef<HTMLElement, SelectProps>(
       fieldState: { error },
       formState: { isSubmitSuccessful }
     } = useController({ name, control })
+    const { resetField } = useFormContext()
 
     const [isShowList, setIsShowList] = useState<boolean>(false)
     const selectTriggerRef = useRef<HTMLDivElement | null>(null)
@@ -80,11 +79,12 @@ const Select = forwardRef<HTMLElement, SelectProps>(
     useEffect(() => {
       if (isSubmitSuccessful) {
         setSelectedOption(undefined)
-        field.onChange('')
-        // setSelectedOptions([])
+        // field.onChange('')
+        resetField(name)
+        setSelectedOptions([])
         // field.onChange([])
       }
-    }, [isSubmitSuccessful, field])
+    }, [isSubmitSuccessful])
 
     useEffect(() => {
       optionDefault && setSelectedOption(optionDefault)

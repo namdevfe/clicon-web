@@ -19,4 +19,9 @@ export interface Product extends Base {
   stock?: number
 }
 
-export type AddProductPayload = z.infer<typeof addProductSchema>
+export type AddProductPayload = z.infer<typeof addProductSchema> & {
+  attributes?: {
+    name: string
+    value: string
+  }[]
+}
