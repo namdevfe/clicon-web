@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { StatusCodes } from 'http-status-codes'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 interface UserFormProps {
@@ -26,7 +26,7 @@ const UserForm = ({ user }: UserFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isRolesFetching, setIsRolesFetching] = useState<boolean>(true)
   const [roles, setRoles] = useState<Role[]>([])
-  const { control, handleSubmit, reset, setValue } = useForm<AddUserPayload | EditUserPayload>({
+  const methods = useForm<AddUserPayload | EditUserPayload>({
     defaultValues: {
       avatar: undefined,
       email: '',
@@ -64,8 +64,8 @@ const UserForm = ({ user }: UserFormProps) => {
     try {
       const response = await editUser(id, payload)
       if (!!response?.data) {
-        setValue('role', '')
-        reset()
+        methods.setValue('role', '')
+        methods.reset()
         toast.success(response.message)
         router.push('/admin/users')
       }
@@ -80,8 +80,8 @@ const UserForm = ({ user }: UserFormProps) => {
     try {
       const response = await addUser(payload)
       if (response?.statusCode === StatusCodes.OK && response?.message) {
-        setValue('role', '')
-        reset()
+        methods.setValue('role', '')
+        methods.reset()
         toast.success(response.message ?? 'Add new user is successfully.')
         router.push('/admin/users')
       }
@@ -111,7 +111,7 @@ const UserForm = ({ user }: UserFormProps) => {
   useEffect(() => {
     if (user) {
       const { email, firstName, lastName, role, avatar } = user || {}
-      reset({
+      methods.reset({
         email,
         avatar,
         firstName,
@@ -119,39 +119,41 @@ const UserForm = ({ user }: UserFormProps) => {
         role: role as string
       })
     }
-  }, [user, reset])
+  }, [user, methods.reset])
 
   return (
-    <form onSubmit={handleSubmit(handleUserFormSubmit)}>
-      <Input
-        label='Avatar'
-        name='avatar'
-        control={control}
-        disabled={isLoading}
-        renderProps={(props) => {
-          return <UploadImage {...props} />
-        }}
-      />
-      <Input disabled={isLoading || !!user} label='Email' name='email' control={control} />
-      <Input disabled={isLoading} label='Password' name='password' control={control} isPassword />
-      <Input disabled={isLoading} label='First name' name='firstName' control={control} />
-      <Input disabled={isLoading} label='Last name' name='lastName' control={control} />
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(handleUserFormSubmit)}>
+        <Input
+          label='Avatar'
+          name='avatar'
+          control={methods.control}
+          disabled={isLoading}
+          renderProps={(props) => {
+            return <UploadImage {...props} />
+          }}
+        />
+        <Input disabled={isLoading || !!user} label='Email' name='email' control={methods.control} />
+        <Input disabled={isLoading} label='Password' name='password' control={methods.control} isPassword />
+        <Input disabled={isLoading} label='First name' name='firstName' control={methods.control} />
+        <Input disabled={isLoading} label='Last name' name='lastName' control={methods.control} />
 
-      <Input
-        disabled={isRolesFetching || isLoading}
-        label='Role'
-        name='role'
-        control={control}
-        placeholder='Select role...'
-        renderProps={(props) => <Select {...props} options={roleOptions || []} />}
-      />
+        <Input
+          disabled={isRolesFetching || isLoading}
+          label='Role'
+          name='role'
+          control={methods.control}
+          placeholder='Select role...'
+          renderProps={(props) => <Select {...props} options={roleOptions || []} />}
+        />
 
-      <div className='flex items-center gap-2 mt-6'>
-        <Button type='submit' size='medium' disabled={isLoading} isLoading={isLoading}>
-          Save changes
-        </Button>
-      </div>
-    </form>
+        <div className='flex items-center gap-2 mt-6'>
+          <Button type='submit' size='medium' disabled={isLoading} isLoading={isLoading}>
+            Save changes
+          </Button>
+        </div>
+      </form>
+    </FormProvider>
   )
 }
 
