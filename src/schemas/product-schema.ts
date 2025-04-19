@@ -18,5 +18,13 @@ export const addProductSchema = z.object({
   category: z.string().min(1, 'Category is required'),
   brand: z.string().min(1, 'Brand is required'),
   tags: z.optional(z.array(z.string().trim())),
-  stock: z.optional(z.number())
+  stock: z.optional(z.number()),
+  attributes: z.optional(
+    z.array(
+      z.object({
+        name: z.string().trim(),
+        value: z.string().trim()
+      })
+    )
+  )
 })
