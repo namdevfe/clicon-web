@@ -23,6 +23,7 @@ export interface Pagination {
 export interface QueryParams {
   page: number
   limit: number
-  sort?: 'asc' | 'desc'
+  sort?: 'asc' | 'desc' | string
   sortBy?: string
+  [key: string]: any
 }
